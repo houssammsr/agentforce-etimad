@@ -1,0 +1,1226 @@
+{
+  "schema_version": 1,
+  "dataset_version": "phase1-pilot-v1",
+  "description": "62 agent-authored candidate assertions. Not exhaustive, independent gold, or a blind holdout.",
+  "requirements": [
+    {
+      "id": "TAQEEM-SOFTWARE-2026::SUBMISSION_DATE",
+      "document_id": "TAQEEM-SOFTWARE-2026",
+      "concept": "SUBMISSION_DATE",
+      "category": "date",
+      "citation": {
+        "pdf_page": 5,
+        "printed_page": "5",
+        "section": "3"
+      },
+      "expected": {
+        "date": "2026-04-14",
+        "calendar": "gregorian",
+        "time_literal": "12:00 مساء",
+        "time_iso": null,
+        "timezone": null,
+        "needs_time_confirmation": true
+      },
+      "review_status": "agent_candidate_not_independent_gold",
+      "coverage": "selected_clauses_only",
+      "critical": true
+    },
+    {
+      "id": "TAQEEM-SOFTWARE-2026::ENQUIRY_DATE",
+      "document_id": "TAQEEM-SOFTWARE-2026",
+      "concept": "ENQUIRY_DATE",
+      "category": "date",
+      "citation": {
+        "pdf_page": 5,
+        "printed_page": "5",
+        "section": "3"
+      },
+      "expected": {
+        "date": "2026-04-09",
+        "calendar": "gregorian",
+        "time_literal": "12:00 مساء",
+        "time_iso": null,
+        "timezone": null,
+        "needs_time_confirmation": true
+      },
+      "review_status": "agent_candidate_not_independent_gold",
+      "coverage": "selected_clauses_only",
+      "critical": true
+    },
+    {
+      "id": "TAQEEM-SOFTWARE-2026::AWARD_DATE",
+      "document_id": "TAQEEM-SOFTWARE-2026",
+      "concept": "AWARD_DATE",
+      "category": "clarification",
+      "citation": {
+        "pdf_page": 5,
+        "printed_page": "5",
+        "section": "3"
+      },
+      "expected": {
+        "date": null,
+        "status": "authority_to_determine"
+      },
+      "review_status": "agent_candidate_not_independent_gold",
+      "coverage": "selected_clauses_only",
+      "critical": true
+    },
+    {
+      "id": "TAQEEM-SOFTWARE-2026::COMMERCIAL_REGISTRATION",
+      "document_id": "TAQEEM-SOFTWARE-2026",
+      "concept": "COMMERCIAL_REGISTRATION",
+      "category": "eligibility",
+      "citation": {
+        "pdf_page": 6,
+        "printed_page": "6",
+        "section": "5(a)"
+      },
+      "expected": {
+        "required": true,
+        "scope": [
+          "bidder",
+          "subcontractor"
+        ],
+        "alternative": "relevant_statutory_license_when_registration_not_legally_required",
+        "validity": "current"
+      },
+      "review_status": "agent_candidate_not_independent_gold",
+      "coverage": "selected_clauses_only",
+      "critical": true
+    },
+    {
+      "id": "TAQEEM-SOFTWARE-2026::ZAKAT_TAX_CERTIFICATE",
+      "document_id": "TAQEEM-SOFTWARE-2026",
+      "concept": "ZAKAT_TAX_CERTIFICATE",
+      "category": "eligibility",
+      "citation": {
+        "pdf_page": 6,
+        "printed_page": "6",
+        "section": "5(b)"
+      },
+      "expected": {
+        "required": "when_legally_applicable",
+        "validity": "current"
+      },
+      "review_status": "agent_candidate_not_independent_gold",
+      "coverage": "selected_clauses_only",
+      "critical": true
+    },
+    {
+      "id": "TAQEEM-SOFTWARE-2026::CHAMBER_CERTIFICATE",
+      "document_id": "TAQEEM-SOFTWARE-2026",
+      "concept": "CHAMBER_CERTIFICATE",
+      "category": "eligibility",
+      "citation": {
+        "pdf_page": 6,
+        "printed_page": "6",
+        "section": "5(c)"
+      },
+      "expected": {
+        "required": "when_legally_applicable",
+        "validity": "current"
+      },
+      "review_status": "agent_candidate_not_independent_gold",
+      "coverage": "selected_clauses_only",
+      "critical": true
+    },
+    {
+      "id": "TAQEEM-SOFTWARE-2026::SME_EVIDENCE",
+      "document_id": "TAQEEM-SOFTWARE-2026",
+      "concept": "SME_EVIDENCE",
+      "category": "eligibility",
+      "citation": {
+        "pdf_page": 6,
+        "printed_page": "6",
+        "section": "5(d)"
+      },
+      "expected": {
+        "required": "if_claiming_local_SME_status"
+      },
+      "review_status": "agent_candidate_not_independent_gold",
+      "coverage": "selected_clauses_only",
+      "critical": true
+    },
+    {
+      "id": "TAQEEM-SOFTWARE-2026::BID_LANGUAGE",
+      "document_id": "TAQEEM-SOFTWARE-2026",
+      "concept": "BID_LANGUAGE",
+      "category": "submission",
+      "citation": {
+        "pdf_page": 13,
+        "printed_page": "13",
+        "section": "26"
+      },
+      "expected": {
+        "language": "ar",
+        "other_language_documents": "permitted_with_translation",
+        "conflict_precedence": "arabic"
+      },
+      "review_status": "agent_candidate_not_independent_gold",
+      "coverage": "selected_clauses_only",
+      "critical": true
+    },
+    {
+      "id": "TAQEEM-SOFTWARE-2026::CURRENCY",
+      "document_id": "TAQEEM-SOFTWARE-2026",
+      "concept": "CURRENCY",
+      "category": "submission",
+      "citation": {
+        "pdf_page": 13,
+        "printed_page": "13",
+        "section": "27"
+      },
+      "expected": {
+        "currency": "SAR",
+        "exception": "special_conditions_may_specify_other_currency"
+      },
+      "review_status": "agent_candidate_not_independent_gold",
+      "coverage": "selected_clauses_only",
+      "critical": false
+    },
+    {
+      "id": "TAQEEM-SOFTWARE-2026::BID_VALIDITY",
+      "document_id": "TAQEEM-SOFTWARE-2026",
+      "concept": "BID_VALIDITY",
+      "category": "submission",
+      "citation": {
+        "pdf_page": 13,
+        "printed_page": "13",
+        "section": "28"
+      },
+      "expected": {
+        "minimum": 90,
+        "unit": "days_as_stated",
+        "origin": "offer_opening_date"
+      },
+      "review_status": "agent_candidate_not_independent_gold",
+      "coverage": "selected_clauses_only",
+      "critical": true
+    },
+    {
+      "id": "TAQEEM-SOFTWARE-2026::BID_SECURITY_RATE",
+      "document_id": "TAQEEM-SOFTWARE-2026",
+      "concept": "BID_SECURITY_RATE",
+      "category": "submission",
+      "citation": {
+        "pdf_page": 15,
+        "printed_page": "15",
+        "section": "40"
+      },
+      "expected": {
+        "rate": 1,
+        "unit": "percent",
+        "basis": "total_offer",
+        "conditional_on": "not_exempt",
+        "related_concept": "LOCAL_SME_SECURITY_EXEMPTION"
+      },
+      "review_status": "agent_candidate_not_independent_gold",
+      "coverage": "selected_clauses_only",
+      "critical": true
+    },
+    {
+      "id": "TAQEEM-SOFTWARE-2026::LOCAL_SME_SECURITY_EXEMPTION",
+      "document_id": "TAQEEM-SOFTWARE-2026",
+      "concept": "LOCAL_SME_SECURITY_EXEMPTION",
+      "category": "exception",
+      "citation": {
+        "pdf_page": 16,
+        "printed_page": "16",
+        "section": "40(second)(e)"
+      },
+      "expected": {
+        "local_SME_exempt_from_initial_security": true,
+        "requires_status_evidence": true,
+        "not_exempt_from_final_security_by_this_clause": true
+      },
+      "review_status": "agent_candidate_not_independent_gold",
+      "coverage": "selected_clauses_only",
+      "critical": true
+    },
+    {
+      "id": "TAQEEM-SOFTWARE-2026::SECURITY_VALIDITY",
+      "document_id": "TAQEEM-SOFTWARE-2026",
+      "concept": "SECURITY_VALIDITY",
+      "category": "submission",
+      "citation": {
+        "pdf_page": 16,
+        "printed_page": "16",
+        "section": "40(b)"
+      },
+      "expected": {
+        "minimum": 90,
+        "unit": "days_as_stated",
+        "origin": "offer_opening_date",
+        "shortfall": "committee_remedy_provisions_apply"
+      },
+      "review_status": "agent_candidate_not_independent_gold",
+      "coverage": "selected_clauses_only",
+      "critical": true
+    },
+    {
+      "id": "TAQEEM-SOFTWARE-2026::TECHNICAL_PASS",
+      "document_id": "TAQEEM-SOFTWARE-2026",
+      "concept": "TECHNICAL_PASS",
+      "category": "evaluation",
+      "citation": {
+        "pdf_page": 20,
+        "printed_page": "20",
+        "section": "50"
+      },
+      "expected": {
+        "minimum": 50,
+        "unit": "points",
+        "technical_maximum": 70,
+        "not_percentage": true
+      },
+      "review_status": "agent_candidate_not_independent_gold",
+      "coverage": "selected_clauses_only",
+      "critical": true
+    },
+    {
+      "id": "TAQEEM-SOFTWARE-2026::EVALUATION_WEIGHTS",
+      "document_id": "TAQEEM-SOFTWARE-2026",
+      "concept": "EVALUATION_WEIGHTS",
+      "category": "evaluation",
+      "citation": {
+        "pdf_page": 20,
+        "printed_page": "20",
+        "section": "50"
+      },
+      "expected": {
+        "technical": 70,
+        "financial": 30,
+        "unit": "points_of_100"
+      },
+      "review_status": "agent_candidate_not_independent_gold",
+      "coverage": "selected_clauses_only",
+      "critical": true
+    },
+    {
+      "id": "TAQEEM-SOFTWARE-2026::AWARD_RULE",
+      "document_id": "TAQEEM-SOFTWARE-2026",
+      "concept": "AWARD_RULE",
+      "category": "evaluation",
+      "citation": {
+        "pdf_page": 20,
+        "printed_page": "20",
+        "section": "50"
+      },
+      "expected": {
+        "rule": "best_combined_score",
+        "needs_clarification": false,
+        "reason": null
+      },
+      "review_status": "agent_candidate_not_independent_gold",
+      "coverage": "selected_clauses_only",
+      "critical": true
+    },
+    {
+      "id": "TAQEEM-SOFTWARE-2026::PRICE_PREFERENCE",
+      "document_id": "TAQEEM-SOFTWARE-2026",
+      "concept": "PRICE_PREFERENCE",
+      "category": "evaluation",
+      "citation": {
+        "pdf_page": 20,
+        "printed_page": "20",
+        "section": "50"
+      },
+      "expected": {
+        "adjustment_percent": 10,
+        "basis": "assumed_other_offer_prices",
+        "beneficiaries": [
+          "local_SME",
+          "listed_company"
+        ],
+        "not_local_content_minimum": true
+      },
+      "review_status": "agent_candidate_not_independent_gold",
+      "coverage": "selected_clauses_only",
+      "critical": false
+    },
+    {
+      "id": "TAQEEM-SOFTWARE-2026::CERTIFICATE_REMEDY",
+      "document_id": "TAQEEM-SOFTWARE-2026",
+      "concept": "CERTIFICATE_REMEDY",
+      "category": "exception",
+      "citation": {
+        "pdf_page": 21,
+        "printed_page": "21",
+        "section": "52(second)"
+      },
+      "expected": {
+        "missing_or_expired_certificates": "committee_sets_remedy_period",
+        "maximum_working_days": 10,
+        "not_automatic_immediate_rejection": true
+      },
+      "review_status": "agent_candidate_not_independent_gold",
+      "coverage": "selected_clauses_only",
+      "critical": true
+    },
+    {
+      "id": "TAQEEM-SOFTWARE-2026::FINAL_SECURITY",
+      "document_id": "TAQEEM-SOFTWARE-2026",
+      "concept": "FINAL_SECURITY",
+      "category": "contract",
+      "citation": {
+        "pdf_page": 23,
+        "printed_page": "23",
+        "section": "56(first)"
+      },
+      "expected": {
+        "rate": 5,
+        "unit": "percent",
+        "basis": "contract_value",
+        "deadline_working_days": 10,
+        "origin": "award_notification",
+        "related_section": "56(fourth)_supply_exception"
+      },
+      "review_status": "agent_candidate_not_independent_gold",
+      "coverage": "selected_clauses_only",
+      "critical": true
+    },
+    {
+      "id": "TAQEEM-SOFTWARE-2026::CONTRACT_BEFORE_WORK",
+      "document_id": "TAQEEM-SOFTWARE-2026",
+      "concept": "CONTRACT_BEFORE_WORK",
+      "category": "contract",
+      "citation": {
+        "pdf_page": 23,
+        "printed_page": "23",
+        "section": "57"
+      },
+      "expected": {
+        "work_before_signature": false
+      },
+      "review_status": "agent_candidate_not_independent_gold",
+      "coverage": "selected_clauses_only",
+      "critical": true
+    },
+    {
+      "id": "TAQEEM-ERP-2026::SUBMISSION_DATE",
+      "document_id": "TAQEEM-ERP-2026",
+      "concept": "SUBMISSION_DATE",
+      "category": "date",
+      "citation": {
+        "pdf_page": 5,
+        "printed_page": "5",
+        "section": "3"
+      },
+      "expected": {
+        "date": "2026-03-03",
+        "calendar": "gregorian",
+        "time_literal": "12:00 مساء",
+        "time_iso": null,
+        "timezone": null,
+        "needs_time_confirmation": true
+      },
+      "review_status": "agent_candidate_not_independent_gold",
+      "coverage": "selected_clauses_only",
+      "critical": true
+    },
+    {
+      "id": "TAQEEM-ERP-2026::ENQUIRY_DATE",
+      "document_id": "TAQEEM-ERP-2026",
+      "concept": "ENQUIRY_DATE",
+      "category": "date",
+      "citation": {
+        "pdf_page": 5,
+        "printed_page": "5",
+        "section": "3"
+      },
+      "expected": {
+        "date": "2026-02-26",
+        "calendar": "gregorian",
+        "time_literal": "12:00 مساء",
+        "time_iso": null,
+        "timezone": null,
+        "needs_time_confirmation": true
+      },
+      "review_status": "agent_candidate_not_independent_gold",
+      "coverage": "selected_clauses_only",
+      "critical": true
+    },
+    {
+      "id": "TAQEEM-ERP-2026::AWARD_DATE",
+      "document_id": "TAQEEM-ERP-2026",
+      "concept": "AWARD_DATE",
+      "category": "clarification",
+      "citation": {
+        "pdf_page": 5,
+        "printed_page": "5",
+        "section": "3"
+      },
+      "expected": {
+        "date": null,
+        "status": "authority_to_determine"
+      },
+      "review_status": "agent_candidate_not_independent_gold",
+      "coverage": "selected_clauses_only",
+      "critical": true
+    },
+    {
+      "id": "TAQEEM-ERP-2026::COMMERCIAL_REGISTRATION",
+      "document_id": "TAQEEM-ERP-2026",
+      "concept": "COMMERCIAL_REGISTRATION",
+      "category": "eligibility",
+      "citation": {
+        "pdf_page": 6,
+        "printed_page": "6",
+        "section": "5(a)"
+      },
+      "expected": {
+        "required": true,
+        "scope": [
+          "bidder",
+          "subcontractor"
+        ],
+        "alternative": "relevant_statutory_license_when_registration_not_legally_required",
+        "validity": "current"
+      },
+      "review_status": "agent_candidate_not_independent_gold",
+      "coverage": "selected_clauses_only",
+      "critical": true
+    },
+    {
+      "id": "TAQEEM-ERP-2026::ZAKAT_TAX_CERTIFICATE",
+      "document_id": "TAQEEM-ERP-2026",
+      "concept": "ZAKAT_TAX_CERTIFICATE",
+      "category": "eligibility",
+      "citation": {
+        "pdf_page": 6,
+        "printed_page": "6",
+        "section": "5(b)"
+      },
+      "expected": {
+        "required": "when_legally_applicable",
+        "validity": "current"
+      },
+      "review_status": "agent_candidate_not_independent_gold",
+      "coverage": "selected_clauses_only",
+      "critical": true
+    },
+    {
+      "id": "TAQEEM-ERP-2026::CHAMBER_CERTIFICATE",
+      "document_id": "TAQEEM-ERP-2026",
+      "concept": "CHAMBER_CERTIFICATE",
+      "category": "eligibility",
+      "citation": {
+        "pdf_page": 6,
+        "printed_page": "6",
+        "section": "5(c)"
+      },
+      "expected": {
+        "required": "when_legally_applicable",
+        "validity": "current"
+      },
+      "review_status": "agent_candidate_not_independent_gold",
+      "coverage": "selected_clauses_only",
+      "critical": true
+    },
+    {
+      "id": "TAQEEM-ERP-2026::SME_EVIDENCE",
+      "document_id": "TAQEEM-ERP-2026",
+      "concept": "SME_EVIDENCE",
+      "category": "eligibility",
+      "citation": {
+        "pdf_page": 6,
+        "printed_page": "6",
+        "section": "5(d)"
+      },
+      "expected": {
+        "required": "if_claiming_local_SME_status"
+      },
+      "review_status": "agent_candidate_not_independent_gold",
+      "coverage": "selected_clauses_only",
+      "critical": true
+    },
+    {
+      "id": "TAQEEM-ERP-2026::BID_LANGUAGE",
+      "document_id": "TAQEEM-ERP-2026",
+      "concept": "BID_LANGUAGE",
+      "category": "submission",
+      "citation": {
+        "pdf_page": 13,
+        "printed_page": "13",
+        "section": "26"
+      },
+      "expected": {
+        "language": "ar",
+        "other_language_documents": "permitted_with_translation",
+        "conflict_precedence": "arabic"
+      },
+      "review_status": "agent_candidate_not_independent_gold",
+      "coverage": "selected_clauses_only",
+      "critical": true
+    },
+    {
+      "id": "TAQEEM-ERP-2026::CURRENCY",
+      "document_id": "TAQEEM-ERP-2026",
+      "concept": "CURRENCY",
+      "category": "submission",
+      "citation": {
+        "pdf_page": 13,
+        "printed_page": "13",
+        "section": "27"
+      },
+      "expected": {
+        "currency": "SAR",
+        "exception": "special_conditions_may_specify_other_currency"
+      },
+      "review_status": "agent_candidate_not_independent_gold",
+      "coverage": "selected_clauses_only",
+      "critical": false
+    },
+    {
+      "id": "TAQEEM-ERP-2026::BID_VALIDITY",
+      "document_id": "TAQEEM-ERP-2026",
+      "concept": "BID_VALIDITY",
+      "category": "submission",
+      "citation": {
+        "pdf_page": 13,
+        "printed_page": "13",
+        "section": "28"
+      },
+      "expected": {
+        "minimum": 90,
+        "unit": "authority_working_days_definition_requires_review",
+        "origin": "offer_opening_date"
+      },
+      "review_status": "agent_candidate_not_independent_gold",
+      "coverage": "selected_clauses_only",
+      "critical": true
+    },
+    {
+      "id": "TAQEEM-ERP-2026::BID_SECURITY_RATE",
+      "document_id": "TAQEEM-ERP-2026",
+      "concept": "BID_SECURITY_RATE",
+      "category": "submission",
+      "citation": {
+        "pdf_page": 15,
+        "printed_page": "15",
+        "section": "40"
+      },
+      "expected": {
+        "rate": 1,
+        "unit": "percent",
+        "basis": "total_offer",
+        "conditional_on": "not_exempt",
+        "related_concept": "LOCAL_SME_SECURITY_EXEMPTION"
+      },
+      "review_status": "agent_candidate_not_independent_gold",
+      "coverage": "selected_clauses_only",
+      "critical": true
+    },
+    {
+      "id": "TAQEEM-ERP-2026::LOCAL_SME_SECURITY_EXEMPTION",
+      "document_id": "TAQEEM-ERP-2026",
+      "concept": "LOCAL_SME_SECURITY_EXEMPTION",
+      "category": "exception",
+      "citation": {
+        "pdf_page": 16,
+        "printed_page": "16",
+        "section": "40(second)(e)"
+      },
+      "expected": {
+        "local_SME_exempt_from_initial_security": true,
+        "requires_status_evidence": true,
+        "not_exempt_from_final_security_by_this_clause": true
+      },
+      "review_status": "agent_candidate_not_independent_gold",
+      "coverage": "selected_clauses_only",
+      "critical": true
+    },
+    {
+      "id": "TAQEEM-ERP-2026::SECURITY_VALIDITY",
+      "document_id": "TAQEEM-ERP-2026",
+      "concept": "SECURITY_VALIDITY",
+      "category": "submission",
+      "citation": {
+        "pdf_page": 16,
+        "printed_page": "16",
+        "section": "40(b)"
+      },
+      "expected": {
+        "minimum": 90,
+        "unit": "days_as_stated",
+        "origin": "offer_opening_date",
+        "shortfall": "committee_remedy_provisions_apply"
+      },
+      "review_status": "agent_candidate_not_independent_gold",
+      "coverage": "selected_clauses_only",
+      "critical": true
+    },
+    {
+      "id": "TAQEEM-ERP-2026::TECHNICAL_PASS",
+      "document_id": "TAQEEM-ERP-2026",
+      "concept": "TECHNICAL_PASS",
+      "category": "evaluation",
+      "citation": {
+        "pdf_page": 20,
+        "printed_page": "20",
+        "section": "50"
+      },
+      "expected": {
+        "minimum": 45,
+        "unit": "points",
+        "technical_maximum": 70,
+        "not_percentage": true
+      },
+      "review_status": "agent_candidate_not_independent_gold",
+      "coverage": "selected_clauses_only",
+      "critical": true
+    },
+    {
+      "id": "TAQEEM-ERP-2026::EVALUATION_WEIGHTS",
+      "document_id": "TAQEEM-ERP-2026",
+      "concept": "EVALUATION_WEIGHTS",
+      "category": "evaluation",
+      "citation": {
+        "pdf_page": 20,
+        "printed_page": "20",
+        "section": "50"
+      },
+      "expected": {
+        "technical": 70,
+        "financial": 30,
+        "unit": "points_of_100"
+      },
+      "review_status": "agent_candidate_not_independent_gold",
+      "coverage": "selected_clauses_only",
+      "critical": true
+    },
+    {
+      "id": "TAQEEM-ERP-2026::AWARD_RULE",
+      "document_id": "TAQEEM-ERP-2026",
+      "concept": "AWARD_RULE",
+      "category": "evaluation",
+      "citation": {
+        "pdf_page": 20,
+        "printed_page": "20",
+        "section": "50"
+      },
+      "expected": {
+        "rule": "best_combined_score",
+        "needs_clarification": false,
+        "reason": null
+      },
+      "review_status": "agent_candidate_not_independent_gold",
+      "coverage": "selected_clauses_only",
+      "critical": true
+    },
+    {
+      "id": "TAQEEM-ERP-2026::PRICE_PREFERENCE",
+      "document_id": "TAQEEM-ERP-2026",
+      "concept": "PRICE_PREFERENCE",
+      "category": "evaluation",
+      "citation": {
+        "pdf_page": 20,
+        "printed_page": "20",
+        "section": "50"
+      },
+      "expected": {
+        "adjustment_percent": 10,
+        "basis": "assumed_other_offer_prices",
+        "beneficiaries": [
+          "local_SME",
+          "listed_company"
+        ],
+        "not_local_content_minimum": true
+      },
+      "review_status": "agent_candidate_not_independent_gold",
+      "coverage": "selected_clauses_only",
+      "critical": false
+    },
+    {
+      "id": "TAQEEM-ERP-2026::CERTIFICATE_REMEDY",
+      "document_id": "TAQEEM-ERP-2026",
+      "concept": "CERTIFICATE_REMEDY",
+      "category": "exception",
+      "citation": {
+        "pdf_page": 21,
+        "printed_page": "21",
+        "section": "52(second)"
+      },
+      "expected": {
+        "missing_or_expired_certificates": "committee_sets_remedy_period",
+        "maximum_working_days": 10,
+        "not_automatic_immediate_rejection": true
+      },
+      "review_status": "agent_candidate_not_independent_gold",
+      "coverage": "selected_clauses_only",
+      "critical": true
+    },
+    {
+      "id": "TAQEEM-ERP-2026::FINAL_SECURITY",
+      "document_id": "TAQEEM-ERP-2026",
+      "concept": "FINAL_SECURITY",
+      "category": "contract",
+      "citation": {
+        "pdf_page": 23,
+        "printed_page": "23",
+        "section": "56(first)"
+      },
+      "expected": {
+        "rate": 5,
+        "unit": "percent",
+        "basis": "contract_value",
+        "deadline_working_days": 10,
+        "origin": "award_notification",
+        "related_section": "56(fourth)_supply_exception"
+      },
+      "review_status": "agent_candidate_not_independent_gold",
+      "coverage": "selected_clauses_only",
+      "critical": true
+    },
+    {
+      "id": "TAQEEM-ERP-2026::CONTRACT_BEFORE_WORK",
+      "document_id": "TAQEEM-ERP-2026",
+      "concept": "CONTRACT_BEFORE_WORK",
+      "category": "contract",
+      "citation": {
+        "pdf_page": 23,
+        "printed_page": "23",
+        "section": "57"
+      },
+      "expected": {
+        "work_before_signature": false
+      },
+      "review_status": "agent_candidate_not_independent_gold",
+      "coverage": "selected_clauses_only",
+      "critical": true
+    },
+    {
+      "id": "TAQEEM-AUDIT-2026::SUBMISSION_DATE",
+      "document_id": "TAQEEM-AUDIT-2026",
+      "concept": "SUBMISSION_DATE",
+      "category": "date",
+      "citation": {
+        "pdf_page": 5,
+        "printed_page": "5",
+        "section": "3"
+      },
+      "expected": {
+        "date": "2026-04-07",
+        "calendar": "gregorian",
+        "time_literal": "12:00 مساء",
+        "time_iso": null,
+        "timezone": null,
+        "needs_time_confirmation": true
+      },
+      "review_status": "agent_candidate_not_independent_gold",
+      "coverage": "selected_clauses_only",
+      "critical": true
+    },
+    {
+      "id": "TAQEEM-AUDIT-2026::ENQUIRY_DATE",
+      "document_id": "TAQEEM-AUDIT-2026",
+      "concept": "ENQUIRY_DATE",
+      "category": "date",
+      "citation": {
+        "pdf_page": 5,
+        "printed_page": "5",
+        "section": "3"
+      },
+      "expected": {
+        "date": "2026-04-02",
+        "calendar": "gregorian",
+        "time_literal": "12:00 مساء",
+        "time_iso": null,
+        "timezone": null,
+        "needs_time_confirmation": true
+      },
+      "review_status": "agent_candidate_not_independent_gold",
+      "coverage": "selected_clauses_only",
+      "critical": true
+    },
+    {
+      "id": "TAQEEM-AUDIT-2026::AWARD_DATE",
+      "document_id": "TAQEEM-AUDIT-2026",
+      "concept": "AWARD_DATE",
+      "category": "clarification",
+      "citation": {
+        "pdf_page": 5,
+        "printed_page": "5",
+        "section": "3"
+      },
+      "expected": {
+        "date": null,
+        "status": "authority_to_determine"
+      },
+      "review_status": "agent_candidate_not_independent_gold",
+      "coverage": "selected_clauses_only",
+      "critical": true
+    },
+    {
+      "id": "TAQEEM-AUDIT-2026::COMMERCIAL_REGISTRATION",
+      "document_id": "TAQEEM-AUDIT-2026",
+      "concept": "COMMERCIAL_REGISTRATION",
+      "category": "eligibility",
+      "citation": {
+        "pdf_page": 7,
+        "printed_page": "7",
+        "section": "5(a)"
+      },
+      "expected": {
+        "required": true,
+        "scope": [
+          "bidder",
+          "subcontractor"
+        ],
+        "alternative": "relevant_statutory_license_when_registration_not_legally_required",
+        "validity": "current"
+      },
+      "review_status": "agent_candidate_not_independent_gold",
+      "coverage": "selected_clauses_only",
+      "critical": true
+    },
+    {
+      "id": "TAQEEM-AUDIT-2026::ZAKAT_TAX_CERTIFICATE",
+      "document_id": "TAQEEM-AUDIT-2026",
+      "concept": "ZAKAT_TAX_CERTIFICATE",
+      "category": "eligibility",
+      "citation": {
+        "pdf_page": 7,
+        "printed_page": "7",
+        "section": "5(b)"
+      },
+      "expected": {
+        "required": "when_legally_applicable",
+        "validity": "current"
+      },
+      "review_status": "agent_candidate_not_independent_gold",
+      "coverage": "selected_clauses_only",
+      "critical": true
+    },
+    {
+      "id": "TAQEEM-AUDIT-2026::CHAMBER_CERTIFICATE",
+      "document_id": "TAQEEM-AUDIT-2026",
+      "concept": "CHAMBER_CERTIFICATE",
+      "category": "eligibility",
+      "citation": {
+        "pdf_page": 7,
+        "printed_page": "7",
+        "section": "5(c)"
+      },
+      "expected": {
+        "required": "when_legally_applicable",
+        "validity": "current"
+      },
+      "review_status": "agent_candidate_not_independent_gold",
+      "coverage": "selected_clauses_only",
+      "critical": true
+    },
+    {
+      "id": "TAQEEM-AUDIT-2026::SME_EVIDENCE",
+      "document_id": "TAQEEM-AUDIT-2026",
+      "concept": "SME_EVIDENCE",
+      "category": "eligibility",
+      "citation": {
+        "pdf_page": 7,
+        "printed_page": "7",
+        "section": "5(d)"
+      },
+      "expected": {
+        "required": "if_claiming_local_SME_status"
+      },
+      "review_status": "agent_candidate_not_independent_gold",
+      "coverage": "selected_clauses_only",
+      "critical": true
+    },
+    {
+      "id": "TAQEEM-AUDIT-2026::BID_LANGUAGE",
+      "document_id": "TAQEEM-AUDIT-2026",
+      "concept": "BID_LANGUAGE",
+      "category": "submission",
+      "citation": {
+        "pdf_page": 13,
+        "printed_page": "13",
+        "section": "26"
+      },
+      "expected": {
+        "language": "ar",
+        "other_language_documents": "permitted_with_translation",
+        "conflict_precedence": "arabic"
+      },
+      "review_status": "agent_candidate_not_independent_gold",
+      "coverage": "selected_clauses_only",
+      "critical": true
+    },
+    {
+      "id": "TAQEEM-AUDIT-2026::CURRENCY",
+      "document_id": "TAQEEM-AUDIT-2026",
+      "concept": "CURRENCY",
+      "category": "submission",
+      "citation": {
+        "pdf_page": 13,
+        "printed_page": "13",
+        "section": "27"
+      },
+      "expected": {
+        "currency": "SAR",
+        "exception": "special_conditions_may_specify_other_currency"
+      },
+      "review_status": "agent_candidate_not_independent_gold",
+      "coverage": "selected_clauses_only",
+      "critical": false
+    },
+    {
+      "id": "TAQEEM-AUDIT-2026::BID_VALIDITY",
+      "document_id": "TAQEEM-AUDIT-2026",
+      "concept": "BID_VALIDITY",
+      "category": "submission",
+      "citation": {
+        "pdf_page": 13,
+        "printed_page": "13",
+        "section": "28"
+      },
+      "expected": {
+        "minimum": 90,
+        "unit": "days_as_stated",
+        "origin": "offer_opening_date"
+      },
+      "review_status": "agent_candidate_not_independent_gold",
+      "coverage": "selected_clauses_only",
+      "critical": true
+    },
+    {
+      "id": "TAQEEM-AUDIT-2026::BID_SECURITY_RATE",
+      "document_id": "TAQEEM-AUDIT-2026",
+      "concept": "BID_SECURITY_RATE",
+      "category": "submission",
+      "citation": {
+        "pdf_page": 15,
+        "printed_page": "15",
+        "section": "40"
+      },
+      "expected": {
+        "rate": 1,
+        "unit": "percent",
+        "basis": "total_offer",
+        "conditional_on": "not_exempt",
+        "related_concept": "LOCAL_SME_SECURITY_EXEMPTION"
+      },
+      "review_status": "agent_candidate_not_independent_gold",
+      "coverage": "selected_clauses_only",
+      "critical": true
+    },
+    {
+      "id": "TAQEEM-AUDIT-2026::LOCAL_SME_SECURITY_EXEMPTION",
+      "document_id": "TAQEEM-AUDIT-2026",
+      "concept": "LOCAL_SME_SECURITY_EXEMPTION",
+      "category": "exception",
+      "citation": {
+        "pdf_page": 16,
+        "printed_page": "16",
+        "section": "40(second)(e)"
+      },
+      "expected": {
+        "local_SME_exempt_from_initial_security": true,
+        "requires_status_evidence": true,
+        "not_exempt_from_final_security_by_this_clause": true
+      },
+      "review_status": "agent_candidate_not_independent_gold",
+      "coverage": "selected_clauses_only",
+      "critical": true
+    },
+    {
+      "id": "TAQEEM-AUDIT-2026::SECURITY_VALIDITY",
+      "document_id": "TAQEEM-AUDIT-2026",
+      "concept": "SECURITY_VALIDITY",
+      "category": "submission",
+      "citation": {
+        "pdf_page": 16,
+        "printed_page": "16",
+        "section": "40(b)"
+      },
+      "expected": {
+        "minimum": 90,
+        "unit": "days_as_stated",
+        "origin": "offer_opening_date",
+        "shortfall": "committee_remedy_provisions_apply"
+      },
+      "review_status": "agent_candidate_not_independent_gold",
+      "coverage": "selected_clauses_only",
+      "critical": true
+    },
+    {
+      "id": "TAQEEM-AUDIT-2026::TECHNICAL_PASS",
+      "document_id": "TAQEEM-AUDIT-2026",
+      "concept": "TECHNICAL_PASS",
+      "category": "evaluation",
+      "citation": {
+        "pdf_page": 20,
+        "printed_page": "20",
+        "section": "50"
+      },
+      "expected": {
+        "minimum": 45,
+        "unit": "points",
+        "technical_maximum": 70,
+        "not_percentage": true
+      },
+      "review_status": "agent_candidate_not_independent_gold",
+      "coverage": "selected_clauses_only",
+      "critical": true
+    },
+    {
+      "id": "TAQEEM-AUDIT-2026::EVALUATION_WEIGHTS",
+      "document_id": "TAQEEM-AUDIT-2026",
+      "concept": "EVALUATION_WEIGHTS",
+      "category": "evaluation",
+      "citation": {
+        "pdf_page": 20,
+        "printed_page": "20",
+        "section": "50"
+      },
+      "expected": {
+        "technical": 70,
+        "financial": 30,
+        "unit": "points_of_100"
+      },
+      "review_status": "agent_candidate_not_independent_gold",
+      "coverage": "selected_clauses_only",
+      "critical": true
+    },
+    {
+      "id": "TAQEEM-AUDIT-2026::AWARD_RULE",
+      "document_id": "TAQEEM-AUDIT-2026",
+      "concept": "AWARD_RULE",
+      "category": "evaluation",
+      "citation": {
+        "pdf_page": 20,
+        "printed_page": "20",
+        "section": "50"
+      },
+      "expected": {
+        "rule": "lowest_price_after_technical_pass",
+        "needs_clarification": true,
+        "reason": "weighted_table_and_lowest_price_clause_need_buyer_confirmation"
+      },
+      "review_status": "agent_candidate_not_independent_gold",
+      "coverage": "selected_clauses_only",
+      "critical": true
+    },
+    {
+      "id": "TAQEEM-AUDIT-2026::PRICE_PREFERENCE",
+      "document_id": "TAQEEM-AUDIT-2026",
+      "concept": "PRICE_PREFERENCE",
+      "category": "evaluation",
+      "citation": {
+        "pdf_page": 20,
+        "printed_page": "20",
+        "section": "50"
+      },
+      "expected": {
+        "adjustment_percent": 10,
+        "basis": "assumed_other_offer_prices",
+        "beneficiaries": [
+          "local_SME",
+          "listed_company"
+        ],
+        "not_local_content_minimum": true
+      },
+      "review_status": "agent_candidate_not_independent_gold",
+      "coverage": "selected_clauses_only",
+      "critical": false
+    },
+    {
+      "id": "TAQEEM-AUDIT-2026::CERTIFICATE_REMEDY",
+      "document_id": "TAQEEM-AUDIT-2026",
+      "concept": "CERTIFICATE_REMEDY",
+      "category": "exception",
+      "citation": {
+        "pdf_page": 21,
+        "printed_page": "21",
+        "section": "52(second)"
+      },
+      "expected": {
+        "missing_or_expired_certificates": "committee_sets_remedy_period",
+        "maximum_working_days": 10,
+        "not_automatic_immediate_rejection": true
+      },
+      "review_status": "agent_candidate_not_independent_gold",
+      "coverage": "selected_clauses_only",
+      "critical": true
+    },
+    {
+      "id": "TAQEEM-AUDIT-2026::FINAL_SECURITY",
+      "document_id": "TAQEEM-AUDIT-2026",
+      "concept": "FINAL_SECURITY",
+      "category": "contract",
+      "citation": {
+        "pdf_page": 23,
+        "printed_page": "23",
+        "section": "56(first)"
+      },
+      "expected": {
+        "rate": 5,
+        "unit": "percent",
+        "basis": "contract_value",
+        "deadline_working_days": 10,
+        "origin": "award_notification",
+        "related_section": "56(fourth)_supply_exception"
+      },
+      "review_status": "agent_candidate_not_independent_gold",
+      "coverage": "selected_clauses_only",
+      "critical": true
+    },
+    {
+      "id": "TAQEEM-AUDIT-2026::CONTRACT_BEFORE_WORK",
+      "document_id": "TAQEEM-AUDIT-2026",
+      "concept": "CONTRACT_BEFORE_WORK",
+      "category": "contract",
+      "citation": {
+        "pdf_page": 23,
+        "printed_page": "23",
+        "section": "57"
+      },
+      "expected": {
+        "work_before_signature": false
+      },
+      "review_status": "agent_candidate_not_independent_gold",
+      "coverage": "selected_clauses_only",
+      "critical": true
+    },
+    {
+      "id": "TAQEEM-ERP-2026::PREFERRED_COMPANY_EXPERIENCE",
+      "document_id": "TAQEEM-ERP-2026",
+      "concept": "PREFERRED_COMPANY_EXPERIENCE",
+      "category": "preference",
+      "citation": {
+        "pdf_page": 31,
+        "printed_page": "31",
+        "section": "10"
+      },
+      "expected": {
+        "years": 5,
+        "mandatory": false,
+        "local_representation": "preferred",
+        "do_not_disqualify_for_preference_alone": true
+      },
+      "review_status": "agent_candidate_not_independent_gold",
+      "coverage": "selected_clauses_only",
+      "critical": true
+    },
+    {
+      "id": "TAQEEM-AUDIT-2026::AUDIT_LEAD_EXPERIENCE",
+      "document_id": "TAQEEM-AUDIT-2026",
+      "concept": "AUDIT_LEAD_EXPERIENCE",
+      "category": "contract",
+      "citation": {
+        "pdf_page": 28,
+        "printed_page": "28",
+        "section": "63"
+      },
+      "expected": {
+        "role": "audit_lead",
+        "minimum_years": 8,
+        "qualification": "relevant_degree_or_equivalent",
+        "scope": "proposed_team_not_company_age"
+      },
+      "review_status": "agent_candidate_not_independent_gold",
+      "coverage": "selected_clauses_only",
+      "critical": true
+    }
+  ]
+}

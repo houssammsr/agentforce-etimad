@@ -1,0 +1,186 @@
+{
+  "schema_version": 1,
+  "description": "Arabic-source query cases only. English-source coverage remains pending.",
+  "queries": [
+    {
+      "id": "Q1",
+      "document_id": "TAQEEM-SOFTWARE-2026",
+      "query_language": "ar",
+      "source_language": "ar",
+      "query": "هل المنشأة الصغيرة المحلية مطالبة بالضمان الابتدائي؟",
+      "expected_requirement_ids": [
+        "TAQEEM-SOFTWARE-2026::LOCAL_SME_SECURITY_EXEMPTION"
+      ],
+      "must_not": [
+        "invent_missing_evidence",
+        "use_other_tender_threshold"
+      ],
+      "review_status": "agent_candidate"
+    },
+    {
+      "id": "Q2",
+      "document_id": "TAQEEM-SOFTWARE-2026",
+      "query_language": "en",
+      "source_language": "ar",
+      "query": "Does missing a required certificate mean immediate disqualification?",
+      "expected_requirement_ids": [
+        "TAQEEM-SOFTWARE-2026::CERTIFICATE_REMEDY"
+      ],
+      "must_not": [
+        "invent_missing_evidence",
+        "use_other_tender_threshold"
+      ],
+      "review_status": "agent_candidate"
+    },
+    {
+      "id": "Q3",
+      "document_id": "TAQEEM-SOFTWARE-2026",
+      "query_language": "mixed",
+      "source_language": "ar",
+      "query": "What is the حد أدنى للتقييم الفني, in points rather than percent?",
+      "expected_requirement_ids": [
+        "TAQEEM-SOFTWARE-2026::TECHNICAL_PASS"
+      ],
+      "must_not": [
+        "invent_missing_evidence",
+        "use_other_tender_threshold"
+      ],
+      "review_status": "agent_candidate"
+    },
+    {
+      "id": "Q4",
+      "document_id": "TAQEEM-SOFTWARE-2026",
+      "query_language": "ar",
+      "source_language": "ar",
+      "query": "ما موعد التقديم؟ وهل الوقت والمنطقة الزمنية مؤكدان؟",
+      "expected_requirement_ids": [
+        "TAQEEM-SOFTWARE-2026::SUBMISSION_DATE"
+      ],
+      "must_not": [
+        "invent_missing_evidence",
+        "use_other_tender_threshold"
+      ],
+      "review_status": "agent_candidate"
+    },
+    {
+      "id": "Q5",
+      "document_id": "TAQEEM-ERP-2026",
+      "query_language": "ar",
+      "source_language": "ar",
+      "query": "هل المنشأة الصغيرة المحلية مطالبة بالضمان الابتدائي؟",
+      "expected_requirement_ids": [
+        "TAQEEM-ERP-2026::LOCAL_SME_SECURITY_EXEMPTION"
+      ],
+      "must_not": [
+        "invent_missing_evidence",
+        "use_other_tender_threshold"
+      ],
+      "review_status": "agent_candidate"
+    },
+    {
+      "id": "Q6",
+      "document_id": "TAQEEM-ERP-2026",
+      "query_language": "en",
+      "source_language": "ar",
+      "query": "Does missing a required certificate mean immediate disqualification?",
+      "expected_requirement_ids": [
+        "TAQEEM-ERP-2026::CERTIFICATE_REMEDY"
+      ],
+      "must_not": [
+        "invent_missing_evidence",
+        "use_other_tender_threshold"
+      ],
+      "review_status": "agent_candidate"
+    },
+    {
+      "id": "Q7",
+      "document_id": "TAQEEM-ERP-2026",
+      "query_language": "mixed",
+      "source_language": "ar",
+      "query": "What is the حد أدنى للتقييم الفني, in points rather than percent?",
+      "expected_requirement_ids": [
+        "TAQEEM-ERP-2026::TECHNICAL_PASS"
+      ],
+      "must_not": [
+        "invent_missing_evidence",
+        "use_other_tender_threshold"
+      ],
+      "review_status": "agent_candidate"
+    },
+    {
+      "id": "Q8",
+      "document_id": "TAQEEM-ERP-2026",
+      "query_language": "ar",
+      "source_language": "ar",
+      "query": "ما موعد التقديم؟ وهل الوقت والمنطقة الزمنية مؤكدان؟",
+      "expected_requirement_ids": [
+        "TAQEEM-ERP-2026::SUBMISSION_DATE"
+      ],
+      "must_not": [
+        "invent_missing_evidence",
+        "use_other_tender_threshold"
+      ],
+      "review_status": "agent_candidate"
+    },
+    {
+      "id": "Q9",
+      "document_id": "TAQEEM-AUDIT-2026",
+      "query_language": "ar",
+      "source_language": "ar",
+      "query": "هل المنشأة الصغيرة المحلية مطالبة بالضمان الابتدائي؟",
+      "expected_requirement_ids": [
+        "TAQEEM-AUDIT-2026::LOCAL_SME_SECURITY_EXEMPTION"
+      ],
+      "must_not": [
+        "invent_missing_evidence",
+        "use_other_tender_threshold"
+      ],
+      "review_status": "agent_candidate"
+    },
+    {
+      "id": "Q10",
+      "document_id": "TAQEEM-AUDIT-2026",
+      "query_language": "en",
+      "source_language": "ar",
+      "query": "Does missing a required certificate mean immediate disqualification?",
+      "expected_requirement_ids": [
+        "TAQEEM-AUDIT-2026::CERTIFICATE_REMEDY"
+      ],
+      "must_not": [
+        "invent_missing_evidence",
+        "use_other_tender_threshold"
+      ],
+      "review_status": "agent_candidate"
+    },
+    {
+      "id": "Q11",
+      "document_id": "TAQEEM-AUDIT-2026",
+      "query_language": "mixed",
+      "source_language": "ar",
+      "query": "What is the حد أدنى للتقييم الفني, in points rather than percent?",
+      "expected_requirement_ids": [
+        "TAQEEM-AUDIT-2026::TECHNICAL_PASS"
+      ],
+      "must_not": [
+        "invent_missing_evidence",
+        "use_other_tender_threshold"
+      ],
+      "review_status": "agent_candidate"
+    },
+    {
+      "id": "Q12",
+      "document_id": "TAQEEM-AUDIT-2026",
+      "query_language": "ar",
+      "source_language": "ar",
+      "query": "ما موعد التقديم؟ وهل الوقت والمنطقة الزمنية مؤكدان؟",
+      "expected_requirement_ids": [
+        "TAQEEM-AUDIT-2026::SUBMISSION_DATE"
+      ],
+      "must_not": [
+        "invent_missing_evidence",
+        "use_other_tender_threshold"
+      ],
+      "review_status": "agent_candidate"
+    }
+  ]
+}

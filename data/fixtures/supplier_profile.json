@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "synthetic": true,
+  "company_id": "SYNTHETIC-IT-SUPPLIER-001",
+  "company_name": "Fictional supplier — demonstration only",
+  "assessment_as_of": "2026-02-20",
+  "local_SME": {
+    "claimed": true,
+    "verified": false,
+    "evidence_id": null
+  },
+  "evidence": [
+    {
+      "id": "SYN-CR",
+      "concept": "COMMERCIAL_REGISTRATION",
+      "valid_from": "2025-01-01",
+      "valid_to": "2026-12-31",
+      "scope": "relevant_IT_services",
+      "authenticity": "synthetic"
+    },
+    {
+      "id": "SYN-TAX",
+      "concept": "ZAKAT_TAX_CERTIFICATE",
+      "valid_to": "2026-01-31",
+      "authenticity": "synthetic"
+    }
+  ],
+  "unknown": [
+    "SME_verification",
+    "chamber_membership",
+    "tax_applicability",
+    "audit_team_CVs",
+    "bank_security"
+  ],
+  "notes": "Do not treat current date as a historic tender assessment date; expiry comparisons must use explicit scenario date. No real customer facts."
+}

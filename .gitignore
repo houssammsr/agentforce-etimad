@@ -13,3 +13,7 @@ local-artifacts/
 /README.md
 /PROJECT_PLAN.md
 /AGENTS.md
+/data/raw/
+/data/extracted/
+/data/runs/
+/bid_attachment*.pdf
