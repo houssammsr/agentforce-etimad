@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AiAgentDefinitionVersion xmlns="http://soap.sforce.com/2006/04/metadata">
+    <articleAnswersGPTEnabled>false</articleAnswersGPTEnabled>
+    <billingMode>ActionBased</billingMode>
+    <citationsEnabled>false</citationsEnabled>
+    <conversationVariables>
+        <dataType>Text</dataType>
+        <description>The agent instructions</description>
+        <developerName>AgentScriptInternal_agent_instructions</developerName>
+        <includeInPrompt>false</includeInPrompt>
+        <label>Agent Instructions</label>
+        <visibility>Internal</visibility>
+    </conversationVariables>
+    <conversationVariables>
+        <dataType>Text</dataType>
+        <description>The next topic to be visited</description>
+        <developerName>AgentScriptInternal_next_topic</developerName>
+        <includeInPrompt>false</includeInPrompt>
+        <label>Next Topic</label>
+        <visibility>Internal</visibility>
+    </conversationVariables>
+    <copilotPrimaryLanguage>en_US</copilotPrimaryLanguage>
+    <copilotSecondaryLanguages>ar</copilotSecondaryLanguages>
+    <genAiPlannerName>EtimadFeasibility_v1</genAiPlannerName>
+    <isScriptCompatibleAgent>true</isScriptCompatibleAgent>
+    <knowledgeActionEnabled>false</knowledgeActionEnabled>
+    <knowledgeFallbackEnabled>false</knowledgeFallbackEnabled>
+    <planner>
+        <fullName>EtimadFeasibility_v1</fullName>
+        <agentGraphRef>20Zfj00000BCHMv</agentGraphRef>
+        <description>Read-only capability probe for Arabic and English tender assistance.</description>
+        <localTopicLinks>
+            <genAiPluginName>agent_router</genAiPluginName>
+        </localTopicLinks>
+        <localTopicLinks>
+            <genAiPluginName>feasibility</genAiPluginName>
+        </localTopicLinks>
+        <localTopics>
+            <canEscalate>false</canEscalate>
+            <description>Route feasibility questions to the read-only assistant.</description>
+            <genAiPluginInstructions>
+                <description>You are a read-only feasibility assistant. You have no tender documents, company evidence or write actions. Never invent tender facts, compliance decisions, citations or completed actions.</description>
+                <developerName>instruction0_179fj000004cRPt</developerName>
+                <language>en_US</language>
+                <masterLabel>instruction0_179fj000004cRPt</masterLabel>
+                <sortOrder>1</sortOrder>
+            </genAiPluginInstructions>
+            <language>en_US</language>
+            <localDeveloperName>agent_router</localDeveloperName>
+            <masterLabel>Agent Router</masterLabel>
+            <pluginType>Topic</pluginType>
+        </localTopics>
+        <localTopics>
+            <canEscalate>false</canEscalate>
+            <description>Explain the planned tender workflow without claiming access to documents or tools.</description>
+            <genAiPluginInstructions>
+                <description>You are a read-only feasibility assistant. You have no tender documents, company evidence or write actions. Never invent tender facts, compliance decisions, citations or completed actions.</description>
+                <developerName>instruction0_179fj000004cRPu</developerName>
+                <language>en_US</language>
+                <masterLabel>instruction0_179fj000004cRPu</masterLabel>
+                <sortOrder>1</sortOrder>
+            </genAiPluginInstructions>
+            <language>en_US</language>
+            <localDeveloperName>feasibility</localDeveloperName>
+            <masterLabel>Feasibility</masterLabel>
+            <pluginType>Topic</pluginType>
+        </localTopics>
+        <masterLabel>Etimad Feasibility</masterLabel>
+        <plannerType>Atlas__ConcurrentMultiAgentOrchestration</plannerType>
+    </planner>
+    <smallTalkEnabled>false</smallTalkEnabled>
+    <staticPromptsEnabled>false</staticPromptsEnabled>
+    <status>Inactive</status>
+    <stopRecPrompts>false</stopRecPrompts>
+    <surfacesEnabled>false</surfacesEnabled>
+    <toneType>Casual</toneType>
+    <version>1</version>
+    <welcomeMessage>Etimad feasibility preview. No tender documents are loaded.</welcomeMessage>
+</AiAgentDefinitionVersion>

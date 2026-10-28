@@ -1,0 +1,15 @@
+.sf/
+.sfdx/
+.venv/
+__pycache__/
+.env
+.env.*
+!.env.example
+node_modules/
+coverage/
+test-results/
+local-artifacts/
+*.log
+/README.md
+/PROJECT_PLAN.md
+/AGENTS.md
