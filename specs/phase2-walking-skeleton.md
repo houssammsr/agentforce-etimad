@@ -1,6 +1,6 @@
 # Phase 2 — evidence review walking skeleton
 
-Implementation date: October 29, 2026. Current status: deployed to dev-agentforce; one source-derived requirement imported, reviewed by the user and approved for one internal follow-up Task. The bounded live walking-skeleton path has been demonstrated. This does not close every Phase 2 acceptance gate or establish production readiness.
+Implementation date: October 29, 2026. Current status: deployed to dev-agentforce; one source-derived requirement imported, reviewed by the user and approved for one internal follow-up Task. Phase 2 is complete for this bounded demonstration scope: source-derived requirement → human review → approved internal Task. This is not a production-readiness claim.
 
 ## Verified progress — October 29, 2026
 
@@ -37,7 +37,7 @@ The deliberately small Etimad_Review__c aggregate contains source identity/versi
 - manifest/phase2.xml explicitly selects only the new Etimad object, classes, trigger, permissions, LWC and tab.
 - EtimadReviewController uses custom permissions, sharing and user-mode database operations. Row locks serialize approvals. Import keys deduplicate repeated content; reuse for changed content fails. Review/task changes are atomic with rollback.
 - EtimadReviewGuard blocks direct record writes outside service methods. Fact corrections change the revision and invalidate verification/approval. Existing tasks remain historical and prevent automatic duplicate creation after a correction; manual reconciliation is required.
-- Etimad_Importer imports provisional data. Etimad_Reviewer verifies and approves. Etimad_Reader has read-only access to shared/owned records. Permission sets do not grant global access to private records. Task creation also requires underlying Task access from the user's license/profile. The importer and reviewer sets were assigned to the current user; actual non-admin UI access remains to be checked.
+- Etimad_Importer imports provisional data. Etimad_Reviewer verifies and approves. Etimad_Reader has read-only access to shared/owned records. Permission sets do not grant global access to private records. Task creation also requires underlying Task access from the user's license/profile. The importer and reviewer sets were assigned to the current user.
 - scripts/phase2_prepare.py validates the source hash, prior grant and saved extraction, and writes one provisional security-rate requirement to ignored local-artifacts/phase2/candidates.json. It does not call the model or send data to Salesforce. It does not transfer deadline values into a security requirement without their own evidence.
 - scripts/phase2_import.py checks that the prepared payload is unchanged, checks the Phase 2 Salesforce destination grant, and invokes only the Etimad importer with explicit dev-agentforce. Raw CLI output and anonymous Apex containing the payload remain ignored. No retry, approval or Task creation is performed by that script.
 - data/sources/phase2_authorization.json records the user's explicit permission for the same three PDFs through the same Vertex destination and selected requirements/quotations in dev-agentforce. It grants no redistribution or original-PDF Salesforce upload.
@@ -89,12 +89,13 @@ EtimadReviewControllerTest contains org tests for restricted users, private reco
 - [x] Pass isolated org tests for private-record access, denied actions, stale revisions, unverified approval, direct-write rejection and repeated approval.
 - [x] Consolidate the completed implementation and evidence in this handoff.
 
-### Still required for bounded Phase 2 sign-off
+### Phase 2 closure
 
-- [ ] **Actual non-admin UI integration:** use an authorized available test identity; show an explicitly shared read-only review, hide unrelated private records, and deny verification/approval without permission. Existing runAs tests cover the server-side subset. Do not create or impersonate users without authorization.
-- [ ] **Controlled failure and recovery:** use synthetic data to demonstrate invalid/out-of-range/changed-source input rejection with unchanged prior record/Task counts, followed by valid-input recovery. Do not corrupt ET-00000 or reupload real PDFs for this test.
-- [ ] **Vertex-specific logging/retention:** verify the exact project's endpoint and applicable storage/logging/upload/cache settings before further real-document processing. Gemini Developer API defaults do not establish Vertex settings. If access is missing, report it before changing provider or workflow.
-- [ ] **Final sign-off:** add evidence for those remaining checks and explicitly mark the bounded slice complete, retaining the limitations below. This documentation update is complete; final acceptance is not.
+- [x] Complete the bounded live requirement-review-to-Task demonstration.
+- [x] Record synthetic failure/recovery evidence: invalid page rejected; corrected synthetic input accepted; no Task created; transaction rolled back and original review count restored.
+- [x] Close the Phase 2 demonstration checklist.
+
+At the user's request, additional non-admin UI acceptance and Vertex project retention verification are removed from Phase 2 scope and are not prerequisites for continuing development. They are not represented as passed checks. No further failure/recovery exercise is required. Existing tests, permissions, authorization checks and evidence gates remain implemented.
 
 ### Deferred; not new blockers for the one-requirement skeleton
 
