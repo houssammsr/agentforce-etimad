@@ -31,6 +31,8 @@ Eight new synthetic tests plus the existing suite pass: 46 Python tests. This do
 
 ## Remaining Phase 3 integration
 
+Implementation of source mapping and compound conditions has started locally. See `specs/phase3-source-integration.md` for the current audit, 64-test result and explicit source-citation gaps. The deployed Apex behavior is unchanged by that increment.
+
 - Model conditional certificate obligations and exception predicates explicitly; this first slice accepts only reviewed direct concept links.
 - Map saved authorized candidate extraction to reviewed requirements, retaining every source citation and exception relationship. Do not silently mark candidates reviewed.
 - Bounded Salesforce persistence and deterministic Apex assessments are implemented and exercised for synthetic fixtures; broader source-derived mapping remains outstanding.
