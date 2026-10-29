@@ -4,6 +4,7 @@ import listReviews from '@salesforce/apex/EtimadReviewController.listReviews';
 import approveTask from '@salesforce/apex/EtimadReviewController.approveTask';
 import verifyEvidence from '@salesforce/apex/EtimadReviewController.verifyEvidence';
 import correctFact from '@salesforce/apex/EtimadReviewController.correctFact';
+import { refreshApex } from '@salesforce/apex';
 
 jest.mock('@salesforce/apex/EtimadReviewController.listReviews', () => {
     const { createApexTestWireAdapter } = require('@salesforce/sfdx-lwc-jest');
@@ -20,7 +21,7 @@ const row = { Id: 'a00000000000001AAA', Source_Id__c: 'SYNTHETIC', Concept__c: '
     Fact__c: 'Synthetic fact', Quote__c: 'دليل اصطناعي', Source_URL__c: 'https://example.invalid',
     Revision__c: 'revision-1', Verified_Revision__c: null, PDF_Page__c: 2, Page_Count__c: 3,
     Document_Version__c: 'v1', Synthetic__c: true };
-const flush = async () => { await Promise.resolve(); await Promise.resolve(); await Promise.resolve(); };
+const flush = async () => { for (let i=0; i<12; i++) await Promise.resolve(); };
 function mount(data = [row]) {
     const el = createElement('c-etimad-review', { is: EtimadReview });
     document.body.appendChild(el); listReviews.emit(data); return el;
@@ -31,7 +32,13 @@ function edit(el, field, value) {
     if (field === 'confirmed') input.checked = value; else input.value = value;
     input.dispatchEvent(new CustomEvent('change'));
 }
-afterEach(() => { document.body.replaceChildren(); jest.clearAllMocks(); });
+beforeEach(() => {
+    refreshApex.mockReset().mockResolvedValue();
+    verifyEvidence.mockReset().mockResolvedValue();
+    correctFact.mockReset().mockResolvedValue();
+    approveTask.mockReset().mockResolvedValue();
+});
+afterEach(() => { document.body.replaceChildren(); jest.clearAllMocks(); jest.useRealTimers(); });
 
 test('unverified records cannot approve; Arabic RTL and source evidence are visible', async () => {
     const el = mount(); await flush();
@@ -78,4 +85,57 @@ test('empty and denied-access states expose no source record', async () => {
     listReviews.error({ message:'Access denied' }); await flush();
     expect(el.shadowRoot.querySelector('[role="alert"]')).not.toBeNull();
     expect(el.shadowRoot.querySelectorAll('article')).toHaveLength(0);
+});
+
+test('saved verification plus hanging refresh releases spinner and requires reconciliation', async () => {
+    jest.useFakeTimers();
+    const el=mount(); await flush();
+    refreshApex.mockImplementationOnce(() => new Promise(() => {}));
+    edit(el,'note','Checked original page'); await flush();
+    button(el,'verify').click(); await flush();
+    expect(el.shadowRoot.querySelector('lightning-spinner')).not.toBeNull();
+    expect(el.shadowRoot.querySelector('[role="status"]').textContent).toContain('تم الحفظ');
+    jest.advanceTimersByTime(20000); await flush();
+    expect(el.shadowRoot.querySelector('lightning-spinner')).toBeNull();
+    expect(el.shadowRoot.querySelector('[role="alert"]')).not.toBeNull();
+    // A late wire emission alone must not re-enable writes after an uncertain refresh.
+    listReviews.emit([{ ...row, Verified_Revision__c:row.Revision__c, Review_Note__c:'Saved note' }]);
+    edit(el,'confirmed',true); await flush();
+    expect(button(el,'approve').disabled).toBe(true);
+    refreshApex.mockImplementationOnce(() => {
+        listReviews.emit([{ ...row, Verified_Revision__c:row.Revision__c, Review_Note__c:'Saved note' }]);
+        return Promise.resolve();
+    });
+    el.shadowRoot.querySelectorAll('lightning-button')[1].click(); await flush();
+    expect(el.shadowRoot.querySelector('[role="alert"]')).toBeNull();
+    expect(el.shadowRoot.querySelector('[data-field="note"]').value).toBe('Saved note');
+    edit(el,'confirmed',true); await flush();
+    expect(button(el,'approve').disabled).toBe(false);
+    expect(verifyEvidence).toHaveBeenCalledTimes(1);
+    expect(approveTask).not.toHaveBeenCalled();
+});
+
+test('hanging mutation preserves note and never automatically retries', async () => {
+    jest.useFakeTimers();
+    const el=mount(); await flush();
+    verifyEvidence.mockImplementationOnce(() => new Promise(() => {}));
+    edit(el,'note','Keep this note'); await flush();
+    button(el,'verify').click(); await flush();
+    jest.advanceTimersByTime(20000); await flush();
+    expect(el.shadowRoot.querySelector('lightning-spinner')).toBeNull();
+    expect(el.shadowRoot.querySelector('[data-field="note"]').value).toBe('Keep this note');
+    expect(button(el,'verify').disabled).toBe(true);
+    expect(verifyEvidence).toHaveBeenCalledTimes(1);
+    expect(refreshApex).not.toHaveBeenCalled();
+});
+
+test('failed manual refresh is handled and does not discard drafts', async () => {
+    const el=mount(); await flush();
+    edit(el,'note','Keep draft'); await flush();
+    refreshApex.mockRejectedValueOnce(new Error('Offline'));
+    el.shadowRoot.querySelectorAll('lightning-button')[1].click(); await flush();
+    expect(el.shadowRoot.querySelector('[role="alert"]').textContent).toContain('Offline');
+    expect(el.shadowRoot.querySelector('[data-field="note"]').value).toBe('Keep draft');
+    expect(el.shadowRoot.querySelector('lightning-spinner')).toBeNull();
+    expect(button(el,'verify').disabled).toBe(true);
 });

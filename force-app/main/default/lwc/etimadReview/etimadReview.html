@@ -7,6 +7,7 @@
                 <p class="slds-m-vertical_medium">{labels.warning}</p>
                 <template lwc:if={busy}><lightning-spinner alternative-text="Processing" size="small"></lightning-spinner></template>
                 <template lwc:if={error}><p role="alert" class="slds-text-color_error">{error}</p></template>
+                <template lwc:if={notice}><p role="status">{notice}</p></template>
                 <template lwc:if={empty}><p>{labels.empty}</p></template>
                 <template for:each={rows} for:item="row">
                     <article key={row.Id} class="slds-box slds-m-vertical_medium">

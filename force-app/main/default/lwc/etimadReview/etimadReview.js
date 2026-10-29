@@ -16,7 +16,11 @@ const COPY = {
         stale: 'Earlier Task exists — manual reconciliation required', empty: 'No accessible reviews.',
         warning: 'This is requirement-level evidence review, not a bid approval or compliance certification.',
         confirm: 'I authorize creation of one internal follow-up Task for this revision.',
-        synthetic: 'SYNTHETIC', real: 'SOURCE-DERIVED · provisional' },
+        synthetic: 'SYNTHETIC', real: 'SOURCE-DERIVED · provisional',
+        saved: 'Saved successfully.',
+        timeout: 'The request timed out. Its server outcome may be unknown. Click Refresh to check before retrying.',
+        refreshFailed: 'Could not refresh the review. Click Refresh before taking another action.',
+        reconciled: 'Review refreshed from Salesforce.' },
     ar: { title: 'اعتماد · مراجعة الأدلة', refresh: 'تحديث', source: 'فتح المصدر الأصلي',
         note: 'وضّح كيف تدعم الصفحة الأصلية هذا المتطلب', fact: 'متطلب مستخرج مبدئي',
         quote: 'اقتباس مبدئي — قارنه بالأصل', save: 'حفظ التصحيح وإلغاء التحقق السابق',
@@ -25,7 +29,11 @@ const COPY = {
         stale: 'توجد مهمة سابقة — يلزم التحقق اليدوي', empty: 'لا توجد مراجعات متاحة.',
         warning: 'هذه مراجعة دليل لمتطلب واحد وليست اعتماد عرض أو شهادة امتثال.',
         confirm: 'أوافق على إنشاء مهمة متابعة داخلية واحدة لهذه النسخة.',
-        synthetic: 'بيانات اصطناعية', real: 'مستخرج من المصدر · مبدئي' }
+        synthetic: 'بيانات اصطناعية', real: 'مستخرج من المصدر · مبدئي',
+        saved: 'تم الحفظ بنجاح.',
+        timeout: 'انتهت مهلة الطلب وقد تكون نتيجته على الخادم غير معروفة. اضغط تحديث للتحقق قبل إعادة المحاولة.',
+        refreshFailed: 'تعذر تحديث المراجعة. اضغط تحديث قبل اتخاذ إجراء آخر.',
+        reconciled: 'تم تحديث المراجعة من Salesforce.' }
 };
 
 export default class EtimadReview extends LightningElement {
@@ -33,6 +41,8 @@ export default class EtimadReview extends LightningElement {
     records = [];
     busy = false;
     error;
+    notice;
+    needsRefresh = false;
     wiredResult;
     drafts = {};
     get labels() { return COPY[this.locale]; }
@@ -44,24 +54,27 @@ export default class EtimadReview extends LightningElement {
             const verified = r.Verified_Revision__c === r.Revision__c;
             const approved = r.Approved_Revision__c === r.Revision__c && r.Task_Id__c;
             const draft = this.drafts[r.Id] || {};
-            return { ...r, factDraft: draft.fact ?? r.Fact__c, noteDraft: draft.note ?? '',
+            return { ...r, factDraft: draft.fact ?? r.Fact__c, noteDraft: draft.note ?? r.Review_Note__c ?? '',
                 provenance: r.Synthetic__c ? this.labels.synthetic : this.labels.real,
                 status: approved ? this.labels.approved : r.Task_Id__c ? this.labels.stale :
                     verified ? this.labels.verified : this.labels.pending,
-                disableVerify: this.busy || !canVerify || !(draft.note || '').trim() ||
+                disableVerify: this.busy || this.needsRefresh || !canVerify || !(draft.note ?? r.Review_Note__c ?? '').trim() ||
                     (draft.fact !== undefined && draft.fact !== r.Fact__c),
-                disableSave: this.busy || !canVerify || !draft.fact?.trim() || draft.fact === r.Fact__c,
-                disableApprove: this.busy || !canApprove || !verified || !!r.Task_Id__c || !draft.confirmed ||
+                disableSave: this.busy || this.needsRefresh || !canVerify || !draft.fact?.trim() || draft.fact === r.Fact__c,
+                disableApprove: this.busy || this.needsRefresh || !canApprove || !verified || !!r.Task_Id__c || !draft.confirmed ||
                     (draft.fact !== undefined && draft.fact !== r.Fact__c),
-                confirmed: !!draft.confirmed, readOnly: !canVerify || this.busy,
+                confirmed: !!draft.confirmed, readOnly: !canVerify || this.busy || this.needsRefresh,
                 page: `${r.PDF_Page__c} / ${r.Page_Count__c}` };
         });
     }
     @wire(listReviews)
     wiredReviews(result) {
         this.wiredResult = result;
-        if (result.data) { this.records = result.data; this.error = undefined; }
-        if (result.error) { this.records = []; this.error = this.message(result.error); }
+        if (result.data) {
+            this.records = result.data;
+            if (!this.needsRefresh) this.error = undefined;
+        }
+        if (result.error) { this.records = []; this.needsRefresh = true; this.error = this.message(result.error); }
     }
     message(error) { return error?.body?.message || error?.message || 'Request failed.'; }
     toggleLanguage() { this.locale = this.locale === 'ar' ? 'en' : 'ar'; }
@@ -71,22 +84,50 @@ export default class EtimadReview extends LightningElement {
             [field]: field === 'confirmed' ? event.target.checked : event.target.value,
             ...(field === 'fact' ? { confirmed: false } : {}) } };
     }
-    async refresh() {
+    async bounded(request) {
+        let timer;
+        try {
+            return await Promise.race([request, new Promise((resolve, reject) => {
+                timer = setTimeout(() => reject(new Error(this.labels.timeout)), 20000);
+            })]);
+        } finally { clearTimeout(timer); }
+    }
+    async refreshData() {
+        this.needsRefresh = true;
+        await this.bounded(refreshApex(this.wiredResult));
+        if (this.wiredResult?.error) throw new Error(this.labels.refreshFailed);
         this.drafts = {};
-        await refreshApex(this.wiredResult);
+        this.needsRefresh = false;
+        this.error = undefined;
+        this.notice = this.labels.reconciled;
+    }
+    async refresh() {
+        if (this.busy) return;
+        this.busy = true;
+        this.error = undefined;
+        try { await this.refreshData(); }
+        catch (error) { this.error = this.message(error); }
+        finally { this.busy = false; }
     }
     async act(event) {
         const { id, action } = event.target.dataset;
         const row = this.records.find((r) => r.Id === id);
-        if (!row || this.busy) return;
+        if (!row || this.busy || this.needsRefresh) return;
         this.busy = true;
         this.error = undefined;
+        this.notice = undefined;
+        this.needsRefresh = true;
         try {
             const args = { reviewId: id, expectedRevision: row.Revision__c };
-            if (action === 'verify') await verifyEvidence({ ...args, note: this.drafts[id]?.note });
-            else if (action === 'save') await correctFact({ ...args, fact: this.drafts[id]?.fact });
-            else if (action === 'approve' && this.drafts[id]?.confirmed) await approveTask(args);
-            await this.refresh();
+            let request;
+            if (action === 'verify') request = verifyEvidence({ ...args, note: this.drafts[id]?.note ?? row.Review_Note__c });
+            else if (action === 'save') request = correctFact({ ...args, fact: this.drafts[id]?.fact });
+            else if (action === 'approve' && this.drafts[id]?.confirmed) request = approveTask(args);
+            else throw new Error(this.labels.refreshFailed);
+            // A client timeout does not cancel Apex. Never retry a mutation automatically.
+            await this.bounded(request);
+            this.notice = this.labels.saved;
+            await this.refreshData();
         } catch (error) { this.error = this.message(error); }
         finally { this.busy = false; }
     }
