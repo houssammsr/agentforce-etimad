@@ -63,8 +63,8 @@ Working path: publish/activate the dedicated probe, then preview by --api-name. 
 
 ## Remaining feasibility gates
 
-1. External Gemini: neither GEMINI_API_KEY nor GOOGLE_API_KEY was found in this process environment. This does not prove credentials do not exist elsewhere. Configure the chosen API/project securely outside source control; never paste secrets into chat or tracked files. Verify endpoint, retention settings, model availability, cost and file lifecycle.
-2. Native PDF benchmark: test an authorized small Arabic document, schema validation, source-page references and timeout/error behavior. No Gemini calls or uploads performed yet.
+1. External Gemini — UPDATED: the user supplied a paid Google Cloud project and API-key configuration. A Git-ignored local .env now configures the project-scoped Vertex global endpoint. One synthetic Arabic schema probe passed with HTTP 200 and returned modelVersion gemini-3.8-flash. Binding/IAM and project logging settings were not independently inspected. See docs/VERTEX_INTEGRATION.md. Rotate the chat-exposed key locally.
+2. Native PDF benchmark — UPDATED: after explicit user authorization, three full government PDFs (134 pages total) were sent directly as inline PDF inputs. All requests returned HTTP 200 and STOP; 29/30 selected candidate field comparisons matched literally, with the remaining ERP reference differing only in whitespace. This is not whole-document recall or independently adjudicated accuracy. Exact quotation verification and failure-path tests remain open. See docs/VERTEX_PDF_RESULTS.md.
 3. Calendar converter: select/pin an Umm al-Qura implementation and test independently verified reference pairs, invalid dates and supported range.
 4. Agentforce automated runner: newer runner flags and metadata discovery are verified, but AiTestingDefinition list was empty. No batch test was created/run. Verify actual runner support in this non-sandbox Developer Edition rather than infer it from CLI availability.
 5. Persistence/storage: measure a tiny Requirement/Section fixture before settling field sizes and retention.

@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "authorization_date": "2026-10-28",
+  "authority": "explicit_user_message",
+  "purpose": "Native PDF feasibility testing through the supplied paid Google Cloud endpoint",
+  "source_ids": ["TAQEEM-SOFTWARE-2026", "TAQEEM-ERP-2026", "TAQEEM-AUDIT-2026"],
+  "provider": "Google Cloud Vertex AI",
+  "location": "global",
+  "original_redistribution_authorized": false,
+  "future_customer_documents_authorized": false,
+  "note": "Supersedes the acquisition-time cloud_upload_authorized=false snapshot for these three PDFs for this test purpose only."
+}

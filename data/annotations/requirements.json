@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "dataset_version": "phase1-pilot-v1",
+  "dataset_version": "phase1-pilot-v1.1",
   "description": "62 agent-authored candidate assertions. Not exhaustive, independent gold, or a blind holdout.",
   "requirements": [
     {
@@ -989,8 +989,8 @@
       "concept": "BID_SECURITY_RATE",
       "category": "submission",
       "citation": {
-        "pdf_page": 15,
-        "printed_page": "15",
+        "pdf_page": 16,
+        "printed_page": "16",
         "section": "40"
       },
       "expected": {

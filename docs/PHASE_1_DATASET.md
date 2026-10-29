@@ -1,6 +1,6 @@
 # Pilot dataset and annotation rubric
 
-Version: phase1-pilot-v1. Source acquisition: user downloaded three Taqeem booklets through their browser on October 28, 2026 after automated access returned 403. The user supplied files for this project; originals and extracted text remain local. Do not retry bypass techniques or replace unavailable government packs with a different buyer cohort without discussing it.
+Version: phase1-pilot-v1.1. Source acquisition: user downloaded three Taqeem booklets through their browser on October 28, 2026 after automated access returned 403. The user supplied files for this project; originals and extracted text remain local. Do not retry bypass techniques or replace unavailable government packs with a different buyer cohort without discussing it.
 
 ## Corpus
 
@@ -10,7 +10,9 @@ Version: phase1-pilot-v1. Source acquisition: user downloaded three Taqeem bookl
 | TAQEEM-ERP-2026 | bid_attachment (1).pdf | 36 | 2026-02-15 |
 | TAQEEM-AUDIT-2026 | bid_attachment (2).pdf | 37 | 2026-02-24 |
 
-Manifest: data/sources/government_manifest.json contains SHA-256, source URL, reference, local acquisition path and template group. All three are development data because they share one buyer/template and have been inspected during authoring. No blind held-out performance can be claimed. The ERP booklet is marked Internal: local analysis only; no assumption of redistribution or cloud-upload authorization. No source documents have been sent to Gemini or Salesforce.
+Manifest: data/sources/government_manifest.json contains SHA-256, source URL, reference, local acquisition path and template group. All three are development data because they share one buyer/template and have been inspected during authoring. No blind held-out performance can be claimed. The ERP booklet is marked Internal; redistribution is not authorized. At acquisition cloud-upload permission was not established. The user's subsequent explicit authorization for these three PDFs is recorded separately in data/sources/cloud_authorizations.json. They were then tested through Vertex; see docs/VERTEX_PDF_RESULTS.md. No documents have been uploaded to Salesforce.
+
+Revision v1.1 corrects TAQEEM-AUDIT-2026::BID_SECURITY_RATE to page 16 after inspecting the original rendered page. The previous page 15 reference pointed to the heading rather than the numeric clause. This remains agent-reviewed candidate data, not independent gold.
 
 Earlier ENSAN downloads are retained in ignored local storage as supplemental discovery artifacts only. They are not part of the primary corpus or scored benchmark. No more alternate-source acquisition is scheduled. scripts/acquire_sources.py is an earlier optional acquisition utility, not a required phase command.
 
