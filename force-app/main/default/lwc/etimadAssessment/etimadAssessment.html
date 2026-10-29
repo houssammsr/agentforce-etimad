@@ -1,0 +1,24 @@
+<template>
+    <lightning-card title="تقييم الأدلة الاصطناعية / Synthetic evidence assessment">
+        <div class="slds-p-around_medium">
+            <p>بيانات تجريبية فقط. التقييم لا يعتمد عرضاً ولا ينشئ مهمة. Synthetic only; findings never approve bids or create Tasks.</p>
+            <lightning-button label="تحديث / Refresh" onclick={refresh} disabled={busy}></lightning-button>
+            <lightning-button label="إنشاء مثال / Create synthetic workspace" data-action="create" onclick={act} disabled={createDisabled}></lightning-button>
+            <template lwc:if={error}><p role="alert">{error}</p></template>
+            <lightning-combobox label="Workspace / مساحة التقييم" options={options} value={selected} onchange={choose} disabled={busy}></lightning-combobox>
+            <p><bdi>{context}</bdi></p>
+            <p>Verify each linked requirement in the evidence review below before assessment. راجع المتطلبات المرتبطة أولاً.</p>
+            <lightning-textarea label="Synthetic evidence JSON / أدلة اصطناعية — editing clears verification" value={draft} onchange={edit} disabled={editDisabled}></lightning-textarea>
+            <lightning-button label="حفظ وإلغاء التحقق / Save and reset verification" data-action="save" onclick={act} disabled={editDisabled}></lightning-button>
+            <lightning-input label="Reviewed synthetic evidence ID / معرّف الدليل الذي راجعته" value={evidenceId} onchange={evidence} disabled={editDisabled}></lightning-input>
+            <lightning-button label="أقر بمراجعة الدليل الاصطناعي / Attest synthetic evidence" data-action="verify" onclick={act} disabled={editDisabled}></lightning-button>
+            <lightning-button label="إعادة التقييم / Recompute assessment" data-action="assess" onclick={act} disabled={disabled}></lightning-button>
+            <template for:each={findings} for:item="f">
+                <article key={f.reviewId} class="slds-box slds-m-top_small" dir="auto">
+                    <h3>{f.concept} — {f.status}</h3><p>{f.reason}</p>
+                    <p>Evidence: {f.evidenceIds}</p><p>Revision: {f.revision}</p>
+                </article>
+            </template>
+        </div>
+    </lightning-card>
+</template>

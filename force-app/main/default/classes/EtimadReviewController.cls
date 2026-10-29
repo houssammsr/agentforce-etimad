@@ -21,7 +21,7 @@ public with sharing class EtimadReviewController {
         return [SELECT Id, Name, Source_Id__c, Source_Hash__c, Document_Version__c,
             Source_URL__c, PDF_Page__c, Page_Count__c, Concept__c, Fact__c, Quote__c,
             Revision__c, Verified_Revision__c, Approved_Revision__c, Task_Id__c,
-            Review_Note__c, Synthetic__c, Submission_Deadline_Hijri__c,
+            Review_Note__c, Synthetic__c, Assessment__c, Exception_Concept__c, Submission_Deadline_Hijri__c,
             Submission_Deadline_Gregorian__c
             FROM Etimad_Review__c WITH USER_MODE ORDER BY CreatedDate DESC LIMIT 25];
     }
@@ -60,16 +60,20 @@ public with sharing class EtimadReviewController {
      * @return SHA-256 revision fingerprint.
      */
     public static String revision(Etimad_Review__c row) {
-        return EncodingUtil.convertToHex(Crypto.generateDigest('SHA-256', Blob.valueOf(JSON.serialize(
-            new List<Object>{row.Source_Id__c, row.Source_Hash__c, row.Document_Version__c,
-                row.Source_URL__c, row.PDF_Page__c == null ? null : row.PDF_Page__c.intValue(),
-                row.Page_Count__c == null ? null : row.Page_Count__c.intValue(), row.Concept__c,
-                row.Fact__c, row.Quote__c, row.Submission_Deadline_Hijri__c,
-                row.Submission_Deadline_Gregorian__c, row.Synthetic__c}))));
+        List<Object> parts=new List<Object>{row.Source_Id__c, row.Source_Hash__c, row.Document_Version__c,
+            row.Source_URL__c, row.PDF_Page__c == null ? null : row.PDF_Page__c.intValue(),
+            row.Page_Count__c == null ? null : row.Page_Count__c.intValue(), row.Concept__c,
+            row.Fact__c, row.Quote__c, row.Submission_Deadline_Hijri__c,
+            row.Submission_Deadline_Gregorian__c, row.Synthetic__c};
+        // Preserve Phase 2 fingerprints for unlinked records, including existing approvals.
+        if(row.Assessment__c!=null || row.Exception_Concept__c!=null) {
+            parts.add(row.Assessment__c); parts.add(row.Exception_Concept__c);
+        }
+        return EncodingUtil.convertToHex(Crypto.generateDigest('SHA-256',Blob.valueOf(JSON.serialize(parts))));
     }
 
     private static Etimad_Review__c locked(Id reviewId, String expectedRevision) {
-        List<Etimad_Review__c> rows = [SELECT Id, Source_Id__c, Source_Hash__c, Document_Version__c,
+        List<Etimad_Review__c> rows = [SELECT Id, Assessment__c, Exception_Concept__c, Source_Id__c, Source_Hash__c, Document_Version__c,
             Source_URL__c, PDF_Page__c, Page_Count__c, Concept__c, Fact__c, Quote__c, Synthetic__c,
             Submission_Deadline_Hijri__c, Submission_Deadline_Gregorian__c, Revision__c,
             Verified_Revision__c, Approved_Revision__c, Task_Id__c
@@ -143,6 +147,24 @@ public with sharing class EtimadReviewController {
             Database.rollback(checkpoint);
             throw new ReviewException('Approval failed; no task was committed. Check access and refresh.');
         }
+    }
+
+    /** Link only newly created synthetic fixtures; never attest to source evidence. */
+    public static void linkSynthetic(List<Etimad_Review__c> changes) {
+        requirePermission('Etimad_Import'); requirePermission('Etimad_Verify');
+        Set<Id> ids=new Set<Id>(); for(Etimad_Review__c c:changes) ids.add(c.Id);
+        Map<Id,Etimad_Review__c> current=new Map<Id,Etimad_Review__c>([SELECT Id,Synthetic__c,Assessment__c FROM Etimad_Review__c WHERE Id IN :ids WITH USER_MODE]);
+        Set<Id> workspaceIds=new Set<Id>(); for(Etimad_Review__c c:changes) workspaceIds.add(c.Assessment__c);
+        Set<Id> validWorkspaceIds=new Map<Id,Etimad_Assessment__c>([SELECT Id FROM Etimad_Assessment__c WHERE Id IN :workspaceIds AND Source_Id__c='SYN-PHASE3' WITH USER_MODE]).keySet();
+        List<Etimad_Review__c> updates=new List<Etimad_Review__c>();
+        for(Etimad_Review__c c:changes) {
+            if(!current.containsKey(c.Id) || !current.get(c.Id).Synthetic__c || current.get(c.Id).Assessment__c!=null)
+                throw new ReviewException('Only unlinked synthetic fixtures can be linked.');
+            if(!validWorkspaceIds.contains(c.Assessment__c)) throw new ReviewException('Synthetic workspace required.');
+            updates.add(new Etimad_Review__c(Id=c.Id,Assessment__c=c.Assessment__c,Exception_Concept__c=c.Exception_Concept__c));
+        }
+        serviceWrite=true;
+        try { Database.update(updates,AccessLevel.USER_MODE); } finally { serviceWrite=false; }
     }
 
     private static void writeReview(Etimad_Review__c change) {

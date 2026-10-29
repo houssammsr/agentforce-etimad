@@ -1,0 +1,1 @@
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata"><deploymentStatus>Deployed</deploymentStatus><label>Etimad Synthetic Assessment</label><nameField><displayFormat>EA-{00000}</displayFormat><label>Assessment</label><type>AutoNumber</type></nameField><pluralLabel>Etimad Synthetic Assessments</pluralLabel><sharingModel>Private</sharingModel></CustomObject>
