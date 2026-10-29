@@ -73,3 +73,54 @@ This increment uses the saved Software extraction and native-text ledger only. N
 ### Still required
 
 The user must review the real Software clauses and their stated relationship in the original PDF, then explicitly verify them. Synthetic supplier assertions can then demonstrate the compound paths; they must not be described as real company evidence. No live real-source assessment result is claimed before that review. Final evidence table, immutable assessment snapshots and assessment-bound approval remain outstanding. No commit or push was made during this increment.
+
+## Automated CLI simulation — October 29, 2026
+
+At the user's explicit request, simulated the review transitions and synthetic supplier assertions through the CLI instead of requiring another UI walkthrough. This is rollback-only integration testing, not human source attestation. It does not persist verified source clauses or certify the original interpretation.
+
+Reusable scripts:
+
+- scripts/simulate_source_workspace.apex — bounded scenarios against EA-00001, calling the same permission-checked service methods; no Task approval action.
+- scripts/simulate_source_workspace.py --execute — four sequential batches using explicit dev-agentforce; stops on any failure, with no retries or alternate orgs.
+
+First all-in-one attempt exceeded 100 SOQL queries and failed. It was replaced with smaller bounded transactions, preserving application permission checks and logic. Each successful batch saves the initial workspace/review state, temporarily performs simulated review transitions and supplier assertions, then rolls back and asserts restoration of evidence JSON, workspace revision, clause revision/verification/review metadata, review count and Task count. Temporary review notes explicitly say automated rollback simulation, not human attestation.
+
+All four batches passed:
+
+| Scenario | Security result | Certificate result |
+| --- | --- | --- |
+| Missing evidence | unknown | unknown |
+| Unverified assertions | unknown | unknown |
+| All current verified synthetic conditions | not_applicable | supported |
+| Expired certificate | unknown | unknown |
+| Missing locality | unknown | supported |
+| Conflicting locality | conflicting | supported |
+| Verified nonlocality + negative security assertion | gap | supported |
+| Initial security not omitted | not_applicable under the modeled SME exception | not_applicable |
+
+Each batch additionally simulated a source correction and confirmed SOURCE_RELATIONSHIPS_NOT_REVIEWED before rolling back. Four successful rollback checks confirm no persistent automated source/evidence attestation and unchanged accessible Task/review counts. No original source text was logged by the simulation; raw CLI results stay ignored under local-artifacts/phase3/cli-simulation/.
+
+The automated check replaces the additional manual workflow exercise for this demo, not human judgment about clause meaning. Source clauses in EA-00001 remain in their initial review state. No commit or push is included in this simulation increment.
+
+## Phase 3 closure: evidence table, immutable snapshots, and version-bound approval — October 29, 2026
+
+All three remaining broader Phase 3 pieces have been implemented, deployed, and verified against `dev-agentforce`.
+
+1. **Reviewer-friendly evidence table:**
+   - Upgraded LWC `etimadAssessment` replacing the raw JSON textarea with an interactive `lightning-datatable`, inline row forms, date validation, and discard handlers.
+   - 21 Jest unit tests pass locally (`etimadEvidence.test.js`, `etimadAssessment.test.js`, `etimadReview.test.js`).
+
+2. **Immutable assessment snapshots:**
+   - Deployed `Etimad_Snapshot__c` custom object and fields with `EtimadSnapshotTrigger` blocking updates/deletes.
+   - Implemented `EtimadDecisionService.capture` generating cryptographically hashed immutable snapshot records (`Context_Hash__c`).
+
+3. **Version-bound assessment approval:**
+   - Deployed `Etimad_Approval__c` custom object with `EtimadApprovalTrigger` blocking updates/deletes.
+   - Implemented `EtimadDecisionService.approve` enforcing strict version matching between snapshot context and current workspace/evidence/source revisions. Rejects unresolved, unreviewed, or stale assessments.
+   - Assigned `Etimad_Decision_Data` and `Etimad_Decision_Read` permission sets.
+
+4. **Verified deployment and CLI simulation:**
+   - Dry run `0Affj00000WjWsXCAV`: 18/18 Apex tests passed.
+   - Deployment `0Affj00000WjX8fCAF`: 76 components deployed, 18/18 Apex tests passed.
+   - CLI simulation `scripts/simulate_decision_workflow.py --execute`: Passed with verified atomic rollback, 0 persistent approvals, 0 persistent attestations, 0 tasks created.
+   - 75 Python tests passed.

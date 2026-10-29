@@ -1,0 +1,1 @@
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata"><fullName>Snapshot__c</fullName><label>Snapshot</label><deleteConstraint>Restrict</deleteConstraint><referenceTo>Etimad_Snapshot__c</referenceTo><relationshipLabel>Assessment Acceptances</relationshipLabel><relationshipName>Etimad_Approval_Snapshot</relationshipName><type>Lookup</type></CustomField>

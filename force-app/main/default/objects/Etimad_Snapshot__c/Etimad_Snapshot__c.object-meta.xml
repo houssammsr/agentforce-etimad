@@ -1,0 +1,1 @@
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata"><deploymentStatus>Deployed</deploymentStatus><label>Assessment Snapshot</label><nameField><displayFormat>ES-{00000}</displayFormat><label>Assessment Snapshot Number</label><type>AutoNumber</type></nameField><pluralLabel>Assessment Snapshots</pluralLabel><sharingModel>Private</sharingModel></CustomObject>

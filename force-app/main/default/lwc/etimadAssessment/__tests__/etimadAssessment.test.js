@@ -37,7 +37,7 @@ it('locks further operations after uncertain save until explicit refresh',async(
 
 it('blocks assessment and attestation of unsaved drafts until explicit discard',async()=>{
     const el=await setup();
-    const editor=el.shadowRoot.querySelector('lightning-textarea');
+    const editor=el.shadowRoot.querySelector('[data-field="id"]');
     editor.value='[{"id":"unsaved"}]';editor.dispatchEvent(new CustomEvent('change'));await flush();
     expect(el.shadowRoot.querySelector('[data-action="assess"]').disabled).toBe(true);
     expect(el.shadowRoot.querySelector('[data-action="verify"]').disabled).toBe(true);
@@ -45,18 +45,21 @@ it('blocks assessment and attestation of unsaved drafts until explicit discard',
     el.shadowRoot.querySelector('[data-action="verify"]').dispatchEvent(new CustomEvent('click'));await flush();
     expect(assess).not.toHaveBeenCalled();expect(verifyEvidence).not.toHaveBeenCalled();
     el.shadowRoot.querySelector('[data-action="discard"]').click();await flush();
-    expect(editor.value).toBe('[]');
+    expect(editor.value).toBe('');
     expect(el.shadowRoot.querySelector('[data-action="assess"]').disabled).toBe(false);
 });
 
 it('reloads changed server revision after saving and uses it for assessment',async()=>{
     const el=await setup();
-    const editor=el.shadowRoot.querySelector('lightning-textarea');
-    editor.value='[{"id":"draft"}]';editor.dispatchEvent(new CustomEvent('change'));await flush();
+    const editor=el.shadowRoot.querySelector('lightning-datatable');
+    const row={id:'draft',concept:'BID_SECURITY',supplierId:'SYN-S',validFrom:'2026-01-01',validTo:'2026-12-31',assertion:true,verified:false};
+    listWorkspaces.mockResolvedValue([{...workspace,Evidence_JSON__c:JSON.stringify([row])}]);
+    el.shadowRoot.querySelector('lightning-button').click();await flush();
+    editor.dispatchEvent(new CustomEvent('cellchange',{detail:{draftValues:[{id:'draft',validTo:'2026-05-31'}]}}));await flush();
     saveEvidence.mockResolvedValueOnce();
-    listWorkspaces.mockResolvedValue([{...workspace,Revision__c:'v2',Evidence_JSON__c:'[{"id":"saved","verified":false}]'}]);
+    listWorkspaces.mockResolvedValue([{...workspace,Revision__c:'v2',Evidence_JSON__c:JSON.stringify([{...row,id:'saved'}])}]);
     el.shadowRoot.querySelector('[data-action="save"]').click();await flush();
-    expect(editor.value).toContain('saved');
+    expect(editor.data[0].id).toBe('saved');
     assess.mockResolvedValueOnce([]);
     el.shadowRoot.querySelector('[data-action="assess"]').click();await flush();
     expect(assess).toHaveBeenCalledWith({workspaceId:'SYN-W',expectedRevision:'v2'});

@@ -1,0 +1,1 @@
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata"><deploymentStatus>Deployed</deploymentStatus><label>Assessment Acceptance</label><nameField><displayFormat>ED-{00000}</displayFormat><label>Assessment Acceptance Number</label><type>AutoNumber</type></nameField><pluralLabel>Assessment Acceptances</pluralLabel><sharingModel>Private</sharingModel></CustomObject>

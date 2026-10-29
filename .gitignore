@@ -23,3 +23,7 @@ local-artifacts/
 /docs/VERTEX_INTEGRATION.md
 /docs/VERTEX_PDF_RESULTS.md
 /docs/
+# Local CLI simulation runners
+/scripts/simulate_*.apex
+/scripts/simulate_*.py
+/tests/test_simulate_*.py

@@ -12,13 +12,43 @@
                 <p dir="rtl">بنود من كراسة البرمجيات مع مورد اصطناعي. راجع البنود الثلاثة وعلاقتها قبل التحقق. يتطلب الاستثناء إثبات المحلية وتصنيف المنشأة والشهادة السارية؛ ويطبق متطلب الشهادة عند عدم تقديم الضمان الابتدائي.</p>
             </template>
             <p>Verify each linked requirement in the evidence review below before assessment. راجع المتطلبات المرتبطة أولاً.</p>
-            <lightning-textarea label="Synthetic evidence JSON / أدلة اصطناعية — editing clears verification" value={draft} onchange={edit} disabled={editDisabled}></lightning-textarea>
-            <lightning-button label="حفظ وإلغاء التحقق / Save and reset verification" data-action="save" onclick={act} disabled={editDisabled}></lightning-button>
+            <p>Evidence is synthetic. Table edits are local until Save; saving clears verification. الأدلة اصطناعية والتعديلات تحتاج إلى حفظ وإعادة مراجعة.</p>
+            <template lwc:if={validationError}><p role="alert" data-validation="true">{validationError}</p></template>
+            <lightning-datatable key-field="id" data={evidenceRows} columns={columns} draft-values={pendingEdits} oncellchange={editRows} onrowaction={rowAction} hide-checkbox-column suppress-bottom-bar></lightning-datatable>
+            <fieldset disabled={editDisabled}>
+                <legend>Add evidence / إضافة دليل</legend>
+                <lightning-input label="Evidence ID / معرّف الدليل" data-field="id" value={newRow.id} onchange={newField} disabled={editDisabled}></lightning-input>
+                <lightning-input label="Concept / المفهوم" data-field="concept" value={newRow.concept} onchange={newField} disabled={editDisabled}></lightning-input>
+                <lightning-input label="Valid from / ساري من" type="date" data-field="validFrom" value={newRow.validFrom} onchange={newField} disabled={editDisabled}></lightning-input>
+                <lightning-input label="Valid to / ساري إلى" type="date" data-field="validTo" value={newRow.validTo} onchange={newField} disabled={editDisabled}></lightning-input>
+                <lightning-combobox label="Assertion / نوع الإثبات" data-field="assertion" options={assertionOptions} value={assertionValue} onchange={newField} disabled={editDisabled}></lightning-combobox>
+                <lightning-button label="Add row / إضافة صف" data-action="add" onclick={addRow} disabled={editDisabled}></lightning-button>
+            </fieldset>
+            <lightning-button label="حفظ وإلغاء التحقق / Save and reset verification" data-action="save" onclick={act} disabled={saveDisabled}></lightning-button>
             <template lwc:if={dirty}><p role="status">Unsaved evidence: save or discard before assessment / احفظ التعديلات أو تجاهلها قبل التقييم</p></template>
             <lightning-button label="تجاهل التعديلات / Discard edits" data-action="discard" onclick={discard} disabled={discardDisabled}></lightning-button>
-            <lightning-input label="Reviewed synthetic evidence ID / معرّف الدليل الذي راجعته" value={evidenceId} onchange={evidence} disabled={editDisabled}></lightning-input>
+            <lightning-combobox label="Reviewed evidence / الدليل الذي راجعته" options={evidenceOptions} value={evidenceId} onchange={evidence} disabled={actionDisabled}></lightning-combobox>
             <lightning-button label="أقر بمراجعة الدليل الاصطناعي / Attest synthetic evidence" data-action="verify" onclick={act} disabled={verifyDisabled}></lightning-button>
             <lightning-button label="إعادة التقييم / Recompute assessment" data-action="assess" onclick={act} disabled={actionDisabled}></lightning-button>
+            <lightning-button label="Capture immutable snapshot / حفظ نسخة ثابتة" data-action="capture" onclick={act} disabled={captureDisabled}></lightning-button>
+            <lightning-button label="Snapshot history / سجل النسخ" data-action="history" onclick={act} disabled={actionDisabled}></lightning-button>
+            <lightning-combobox data-role="snapshot" label="Snapshot to review / النسخة للمراجعة" options={snapshotOptions} value={snapshotId} onchange={chooseSnapshot} disabled={actionDisabled}></lightning-combobox>
+            <template lwc:if={selectedSnapshot}><p><bdi>{selectedSnapshot.Context_Hash__c} · {selectedSnapshot.Rule_Version__c}</bdi></p></template>
+            <template lwc:if={snapshotDetails}>
+                <h3>Captured evidence and findings / الأدلة والنتائج المحفوظة</h3>
+                <template for:each={snapshotDetails.evidence} for:item="e">
+                    <p key={e.id}><bdi>{e.id} · {e.concept} · {e.validFrom} — {e.validTo} · assertion={e.assertion} · verified={e.verified}</bdi></p>
+                </template>
+                <template for:each={snapshotDetails.sources} for:item="c">
+                    <article key={c.id} class="slds-box slds-m-top_small" dir="auto"><p>{c.concept} · {c.source} · PDF {c.page}</p><p>{c.version}</p><blockquote>{c.quote}</blockquote></article>
+                </template>
+                <template for:each={snapshotDetails.outcomes} for:item="f">
+                    <p key={f.id}>{f.concept} — {f.status} · {f.reason}</p>
+                </template>
+            </template>
+            <lightning-input type="checkbox" data-role="confirmation" label="I accept this exact assessment version; not bid approval / أقبل نسخة التقييم المحددة فقط" checked={confirmed} onchange={confirm} disabled={actionDisabled}></lightning-input>
+            <lightning-button label="Accept reviewed snapshot / قبول النسخة المراجعة" data-action="approve" onclick={act} disabled={approvalDisabled}></lightning-button>
+            <template lwc:if={notice}><p role="status">{notice}</p></template>
             <template for:each={findings} for:item="f">
                 <article key={f.reviewId} class="slds-box slds-m-top_small" dir="auto">
                     <h3>{f.concept} — {f.status}</h3><p>{f.reason}</p>
