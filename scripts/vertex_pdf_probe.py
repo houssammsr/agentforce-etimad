@@ -8,6 +8,7 @@ import base64
 import hashlib
 import json
 import math
+from datetime import date
 import time
 import urllib.error
 import urllib.request
@@ -62,6 +63,20 @@ def validate_output(output, finish_reason, page_count=None):
         if kind == 'ARRAY' and type(value) is not list:
             return False
     if not all(type(w) is str for w in output['warnings']):
+        return False
+    if output['submission_date_iso'] is not None:
+        try:
+            if date.fromisoformat(output['submission_date_iso']).isoformat() != output['submission_date_iso']:
+                return False
+        except ValueError:
+            return False
+    for name in ('technical_pass_points', 'technical_maximum_points', 'certificate_remedy_max_working_days'):
+        if output[name] is not None and output[name] < 0:
+            return False
+    if (output['technical_pass_points'] is not None and output['technical_maximum_points'] is not None
+            and output['technical_pass_points'] > output['technical_maximum_points']):
+        return False
+    if output['initial_security_percent'] is not None and not 0 <= output['initial_security_percent'] <= 100:
         return False
     if not output['citations']:
         return False

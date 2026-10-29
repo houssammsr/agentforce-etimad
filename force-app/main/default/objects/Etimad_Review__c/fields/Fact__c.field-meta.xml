@@ -1,0 +1,1 @@
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata"><fullName>Fact__c</fullName><label>Fact</label><length>8000</length><visibleLines>4</visibleLines><type>LongTextArea</type></CustomField>

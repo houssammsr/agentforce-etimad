@@ -1,0 +1,6 @@
+{
+  "name": "etimad-phase2",
+  "private": true,
+  "scripts": {"test:unit": "sfdx-lwc-jest -- --runInBand"},
+  "devDependencies": {"@salesforce/sfdx-lwc-jest": "7.9.0"}
+}

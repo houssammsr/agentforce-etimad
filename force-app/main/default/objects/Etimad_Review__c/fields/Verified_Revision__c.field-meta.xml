@@ -1,0 +1,1 @@
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata"><fullName>Verified_Revision__c</fullName><label>Verified Revision</label><length>64</length><type>Text</type></CustomField>

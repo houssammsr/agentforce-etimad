@@ -1,0 +1,30 @@
+<template>
+    <section dir={direction} lang={locale} class="slds-p-around_medium">
+        <lightning-card title={labels.title}>
+            <div class="slds-p-around_medium">
+                <lightning-button label="العربية / English" onclick={toggleLanguage}></lightning-button>
+                <lightning-button label={labels.refresh} onclick={refresh} disabled={busy}></lightning-button>
+                <p class="slds-m-vertical_medium">{labels.warning}</p>
+                <template lwc:if={busy}><lightning-spinner alternative-text="Processing" size="small"></lightning-spinner></template>
+                <template lwc:if={error}><p role="alert" class="slds-text-color_error">{error}</p></template>
+                <template lwc:if={empty}><p>{labels.empty}</p></template>
+                <template for:each={rows} for:item="row">
+                    <article key={row.Id} class="slds-box slds-m-vertical_medium">
+                        <h2 class="slds-text-heading_small"><bdi>{row.Source_Id__c} · {row.Concept__c}</bdi></h2>
+                        <p>{row.provenance} · {row.status}</p>
+                        <p><bdi>PDF {row.page} · {row.Document_Version__c}</bdi></p>
+                        <lightning-formatted-url value={row.Source_URL__c} label={labels.source} target="_blank"></lightning-formatted-url>
+                        <lightning-textarea label={labels.fact} value={row.factDraft} data-id={row.Id} data-field="fact" onchange={edit} disabled={row.readOnly}></lightning-textarea>
+                        <p class="slds-m-top_small">{labels.quote}</p>
+                        <blockquote class="source" dir="auto">{row.Quote__c}</blockquote>
+                        <lightning-button label={labels.save} data-id={row.Id} data-action="save" onclick={act} disabled={row.disableSave}></lightning-button>
+                        <lightning-textarea label={labels.note} value={row.noteDraft} data-id={row.Id} data-field="note" onchange={edit} disabled={row.readOnly}></lightning-textarea>
+                        <lightning-button label={labels.verify} data-id={row.Id} data-action="verify" onclick={act} disabled={row.disableVerify}></lightning-button>
+                        <lightning-input type="checkbox" label={labels.confirm} checked={row.confirmed} data-id={row.Id} data-field="confirmed" onchange={edit} disabled={busy}></lightning-input>
+                        <lightning-button variant="brand" label={labels.approve} data-id={row.Id} data-action="approve" onclick={act} disabled={row.disableApprove}></lightning-button>
+                    </article>
+                </template>
+            </div>
+        </lightning-card>
+    </section>
+</template>

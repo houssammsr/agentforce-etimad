@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "authority": "explicit_user_message",
+  "authorization_date": "2026-10-29",
+  "purpose_code": "phase2_requirement_review",
+  "source_authorization": "cloud_authorizations.json",
+  "source_identity": "The same three source IDs and SHA-256 values in cloud_authorizations.json",
+  "destinations": [
+    {"provider": "Google Cloud Vertex AI", "project_id": "datagoro", "location": "global", "scope": "Extraction of the same three PDFs"},
+    {"provider": "Salesforce", "target_org_alias": "dev-agentforce", "scope": "Selected source-derived requirements and quotations"}
+  ],
+  "original_pdf_salesforce_upload": false,
+  "redistribution_authorized": false,
+  "tracked_source_content_authorized": false,
+  "confirmation": "User selected: Yes, authorize both destinations, after both destinations and source-derived Salesforce storage were explicitly described."
+}

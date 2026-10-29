@@ -1,0 +1,1 @@
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata"><fullName>Review_Note__c</fullName><label>Review Note</label><length>2000</length><visibleLines>4</visibleLines><type>LongTextArea</type></CustomField>
