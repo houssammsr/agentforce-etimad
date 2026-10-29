@@ -26,7 +26,7 @@ public with sharing class EtimadAssessmentService {
         return EncodingUtil.convertToHex(Crypto.generateDigest('SHA-256', Blob.valueOf(JSON.serialize(
             new List<Object>{row.Supplier__c,row.As_Of__c,row.Evidence_JSON__c,row.Source_Id__c,row.Document_Version__c}))));
     }
-    @AuraEnabled(cacheable=true)
+    @AuraEnabled
     public static List<Etimad_Assessment__c> listWorkspaces() {
         permission('Etimad_Read');
         return [SELECT Id,Name,Supplier__c,As_Of__c,Source_Id__c,Document_Version__c,
@@ -103,6 +103,8 @@ public with sharing class EtimadAssessmentService {
                 if(conflict(exceptions)) setFinding(f,'conflicting','EXCEPTION_EVIDENCE_CONFLICT',exceptions);
                 else if(positive(exceptions)) setFinding(f,'not_applicable','REVIEWED_EXCEPTION_SUPPORTED',exceptions);
                 else if(conflict(direct)) setFinding(f,'conflicting','DIRECT_EVIDENCE_CONFLICT',direct);
+                else if(!direct.isEmpty() && !direct[0].assertion && String.isNotBlank(row.Exception_Concept__c) && exceptions.isEmpty())
+                    setFinding(f,'unknown','EXCEPTION_APPLICABILITY_UNRESOLVED',direct);
                 else if(!direct.isEmpty()) setFinding(f,direct[0].assertion?'supported':'gap','VERIFIED_DIRECT_EVIDENCE',direct);
             }
             results.add(f);

@@ -65,4 +65,28 @@ private class EtimadAssessmentTest {
             Assert.areEqual(w.Revision__c,workspace().Revision__c);
         }
     }
+
+    @IsTest static void unresolvedExceptionCannotBecomeGap() {
+        System.runAs(reviewer()) {
+            EtimadAssessmentService.createDemo(); verifyRequirements(); Etimad_Assessment__c w=workspace();
+            List<EtimadAssessmentService.Evidence> rows=EtimadAssessmentService.parse(w.Evidence_JSON__c,w.Supplier__c);
+            rows[0].concept='BID_SECURITY'; rows[0].assertion=false; rows[0].id='DIRECT-NO';
+            EtimadAssessmentService.saveEvidence(w.Id,w.Revision__c,JSON.serialize(rows)); w=workspace();
+            EtimadAssessmentService.verifyEvidence(w.Id,w.Revision__c,'DIRECT-NO'); w=workspace();
+            for(EtimadAssessmentService.Finding f:EtimadAssessmentService.assess(w.Id,w.Revision__c)) {
+                if(f.concept=='BID_SECURITY') {
+                    Assert.areEqual('unknown',f.status);
+                    Assert.areEqual('EXCEPTION_APPLICABILITY_UNRESOLVED',f.reason);
+                }
+            }
+            EtimadAssessmentService.Evidence excluded=(EtimadAssessmentService.Evidence)JSON.deserialize(JSON.serialize(rows[0]),EtimadAssessmentService.Evidence.class);
+            excluded.id='EXCLUDED'; excluded.concept='LOCAL_SME_CERT'; rows.add(excluded);
+            EtimadAssessmentService.saveEvidence(w.Id,w.Revision__c,JSON.serialize(rows)); w=workspace();
+            EtimadAssessmentService.verifyEvidence(w.Id,w.Revision__c,'DIRECT-NO'); w=workspace();
+            EtimadAssessmentService.verifyEvidence(w.Id,w.Revision__c,'EXCLUDED'); w=workspace();
+            for(EtimadAssessmentService.Finding f:EtimadAssessmentService.assess(w.Id,w.Revision__c)) {
+                if(f.concept=='BID_SECURITY') Assert.areEqual('gap',f.status);
+            }
+        }
+    }
 }

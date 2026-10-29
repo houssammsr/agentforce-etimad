@@ -43,7 +43,8 @@ class AssessmentTests(unittest.TestCase):
         self.assertEqual('conflicting', rows[0].status)
 
     def test_verified_negative_direct_evidence_is_gap(self):
-        rows = self.run_case([self.evidence(concept='BID_SECURITY', assertion=False)])
+        rows = self.run_case([self.evidence(concept='BID_SECURITY', assertion=False),
+                              self.evidence(id='EX-NO', assertion=False)])
         self.assertEqual('gap', rows[0].status)
 
     def test_stale_or_unreviewed_requirement_cannot_pass(self):
@@ -64,3 +65,17 @@ class AssessmentTests(unittest.TestCase):
     def test_invalid_interval_rejected(self):
         with self.assertRaises(ValueError):
             self.run_case([self.evidence(valid_from=date(2027, 1, 1))])
+
+    def test_negative_direct_with_unresolved_exception_is_unknown(self):
+        negative = self.evidence(id='DIRECT', concept='BID_SECURITY', assertion=False)
+        for exception in [[], [self.evidence(verified=False)],
+                          [self.evidence(valid_to=date(2026, 5, 31))],
+                          [self.evidence(supplier_id='OTHER')]]:
+            with self.subTest(exception=exception):
+                result = self.run_case([negative, *exception])[0]
+                self.assertEqual('unknown', result.status)
+                self.assertEqual('EXCEPTION_APPLICABILITY_UNRESOLVED', result.reason)
+
+    def test_direct_evidence_without_exception_and_positive_direct_are_supported(self):
+        self.assertEqual('gap', self.run_case([self.evidence(concept='FINAL_SECURITY', assertion=False)])[2].status)
+        self.assertEqual('supported', self.run_case([self.evidence(concept='BID_SECURITY')])[0].status)

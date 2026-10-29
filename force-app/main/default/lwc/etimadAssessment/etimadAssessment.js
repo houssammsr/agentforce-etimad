@@ -18,11 +18,18 @@ export default class EtimadAssessment extends LightningElement {
     uncertain = false;
     get options() { return this.workspaces.map(w => ({label: `${w.Name} · ${w.Supplier__c}`, value:w.Id})); }
     get disabled() { return this.busy || this.uncertain || !this.selected; }
+    get dirty() { const w=this.workspaces.find(x=>x.Id===this.selected); return !!w && this.draft!==w.Evidence_JSON__c; }
+    get actionDisabled() { return this.disabled || this.dirty; }
+    get verifyDisabled() { return this.actionDisabled || !canVerify || !this.evidenceId.trim(); }
+    get discardDisabled() { return this.busy || !this.dirty; }
+    get selectionDisabled() { return this.busy || this.dirty; }
+    get refreshDisabled() { return this.busy || this.dirty; }
+    discard() { if(this.busy) return; this.draft=this.workspaces.find(w=>w.Id===this.selected)?.Evidence_JSON__c || ''; this.findings=[]; this.error=undefined; }
     get editDisabled() { return this.disabled || !canVerify; }
-    get createDisabled() { return this.busy || this.uncertain || !canVerify || !canImport; }
+    get createDisabled() { return this.busy || this.uncertain || this.dirty || !canVerify || !canImport; }
     get context() { const w=this.workspaces.find(x=>x.Id===this.selected); return w ? `${w.Source_Id__c} · ${w.Document_Version__c} · ${w.As_Of__c}` : ''; }
     async refresh() {
-        if(this.busy) return;
+        if(this.busy || this.dirty) return;
         this.busy=true; this.findings=[];
         try { await this.load(); this.uncertain=false; this.error=undefined; }
         catch(e) { this.error=e?.body?.message || e.message; }
@@ -31,9 +38,10 @@ export default class EtimadAssessment extends LightningElement {
     async load() {
         this.workspaces=await this.bounded(listWorkspaces());
         const w=this.workspaces.find(x=>x.Id===this.selected);
-        if(w) this.draft=w.Evidence_JSON__c;
+        this.draft=w?.Evidence_JSON__c || '';
+        if(!w) this.selected=undefined;
     }
-    choose(e) { this.selected=e.detail.value; this.findings=[]; this.draft=this.workspaces.find(w=>w.Id===this.selected)?.Evidence_JSON__c || ''; }
+    choose(e) { if(this.busy || this.dirty) return; this.evidenceId=''; this.selected=e.detail.value; this.findings=[]; this.draft=this.workspaces.find(w=>w.Id===this.selected)?.Evidence_JSON__c || ''; }
     edit(e) { this.draft=e.target.value; this.findings=[]; }
     evidence(e) { this.evidenceId=e.target.value; }
     async bounded(promise) {
@@ -44,6 +52,8 @@ export default class EtimadAssessment extends LightningElement {
     async act(e) {
         if(this.busy || this.uncertain) return;
         const action=e.target.dataset.action;
+        if(this.dirty && action!=='save') return;
+        if(action==='verify' && !this.evidenceId.trim()) return;
         const w=this.workspaces.find(x=>x.Id===this.selected);
         if(action!=='create' && !w) return;
         this.busy=true; this.error=undefined; this.findings=[];
@@ -54,8 +64,11 @@ export default class EtimadAssessment extends LightningElement {
             else if(action==='verify') await this.bounded(verifyEvidence({...args,evidenceId:this.evidenceId}));
             else if(action==='assess') this.findings=await this.bounded(assess(args));
             await this.load();
+            if(action==='assess' && this.workspaces.find(x=>x.Id===this.selected)?.Revision__c!==args.expectedRevision) {
+                this.findings=[]; throw new Error('Evidence changed; recompute / تغيرت الأدلة؛ أعد التقييم');
+            }
         } catch(error) {
-            this.uncertain=true; this.error=error?.body?.message || error.message;
+            this.findings=[]; this.uncertain=true; this.error=error?.body?.message || error.message;
         } finally { this.busy=false; }
     }
 }

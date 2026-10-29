@@ -23,7 +23,7 @@ Eight new synthetic tests plus the existing suite pass: 46 Python tests. This do
 
 ## Salesforce integration implementation — October 29
 
-The offline slice and Phase 2 closure were committed at user request as `0eebcea`. Nothing was pushed. Subsequent Salesforce integration changes remain uncommitted.
+The offline slice and Phase 2 closure were committed at user request as `0eebcea`. Nothing was pushed. The first Salesforce integration slice was subsequently committed as d4794dd. The review fixes described below are uncommitted.
 
 Implemented locally:
 
@@ -46,3 +46,15 @@ sf project deploy start --manifest manifest/phase3.xml --target-org dev-agentfor
 ```
 
 Do not claim this integration is deployed or Phase 3 complete. Full source-derived exception mapping, conditional compound predicates, immutable assessment history/approval binding and final reviewer table remain future work. Current Task approval continues to authorize only an internal requirement-level follow-up; it does not endorse an assessment or bid pursuit. No real-document upload or unrelated org change was made.
+
+## Integration review fixes — October 29, 2026
+
+Implemented after code review:
+
+- listWorkspaces is now a non-cacheable imperative Apex read so post-save/attestation reloads fetch current server data.
+- Unsaved evidence disables assessment, attestation, workspace switching, refresh and example creation. Explicit Discard restores saved evidence; Save remains available. Handler guards enforce this even if a disabled button event is dispatched.
+- A workspace revision change detected during the assessment/reload sequence discards findings rather than displaying them beside a different evidence revision.
+- Python rule version phase3.2 and Apex now return unknown / EXCEPTION_APPLICABILITY_UNRESOLVED when verified direct negative evidence exists but a linked exception has no current verified evidence. Verified negative exception evidence resolves that condition, permitting a gap. Positive direct evidence still supports the requirement; a supported exemption still makes it not applicable.
+- Regression tests cover unsaved drafts, discard, new server revisions after save, changed revisions during assessment, unresolved exception evidence and resolved negative exceptions. A matching Apex regression test was added.
+
+Verification: 48 Python tests and 13 Jest tests passed; git diff --check passed. Four Phase 3 Apex tests are now present but have not been executed in the org. These changes have not been deployed, committed or pushed. The earlier automatic approval rejection of validation remains unresolved; no alternate execution path was used. Use the existing explicit dev-agentforce dry-run command above to validate when execution is available. Phase 2 remains intact; no real source data or provider calls were used for these fixes.

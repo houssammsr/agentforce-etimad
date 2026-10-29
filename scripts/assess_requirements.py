@@ -38,7 +38,7 @@ class Assessment:
     status: Status
     reason: str
     evidence_ids: tuple[str, ...]
-    rule_version: str = 'phase3.1'
+    rule_version: str = 'phase3.2'
 
 
 def assess(requirement: Requirement, evidence: list[Evidence], *,
@@ -83,6 +83,8 @@ def assess(requirement: Requirement, evidence: list[Evidence], *,
     direct = matching(requirement.concept)
     if conflicting(direct):
         return result('conflicting', 'DIRECT_EVIDENCE_CONFLICT', direct)
+    if direct and not direct[0].assertion and requirement.exception_evidence_concept and not exceptions:
+        return result('unknown', 'EXCEPTION_APPLICABILITY_UNRESOLVED', direct)
     if direct:
         return result('supported' if direct[0].assertion else 'gap',
                       'VERIFIED_DIRECT_EVIDENCE', direct)
