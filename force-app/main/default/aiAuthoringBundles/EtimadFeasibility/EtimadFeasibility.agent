@@ -16,6 +16,8 @@ language:
 
 start_agent agent_router:
    description: "Route feasibility questions to the read-only assistant."
+   before_reasoning:
+      transition to @subagent.feasibility
    reasoning:
       instructions:|
          Select the read-only feasibility assistant.
