@@ -2,6 +2,8 @@
 
 October 28, 2026. Engineering preparation and a government-document pilot are implemented locally. Full customer/benchmark sign-off remains pending.
 
+Subsequent Phase 0/1 hardening: see FOUNDATION_HARDENING.md. There are now 29 local tests covering the original integrity checks plus upload authorization, field-level citation contracts, exact baseline scope identity and deterministic calendar conversion. Synthetic behavioral fixtures remain unexecuted against a tender workflow. The historical work notes below describe the original Phase 1 delivery, before the later authorized Vertex tests and Git pushes.
+
 Delivered:
 
 - Three user-provided government booklets imported with hashes, provenance and complete 134-page extraction ledgers.

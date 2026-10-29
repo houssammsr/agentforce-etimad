@@ -1,0 +1,77 @@
+{
+  "pairs": [
+    {
+      "hijri": "1440-01-01",
+      "gregorian": "2018-09-11"
+    },
+    {
+      "hijri": "1440-06-01",
+      "gregorian": "2019-02-06"
+    },
+    {
+      "hijri": "1440-12-01",
+      "gregorian": "2019-08-02"
+    },
+    {
+      "hijri": "1445-01-01",
+      "gregorian": "2023-07-19"
+    },
+    {
+      "hijri": "1445-06-01",
+      "gregorian": "2023-12-14"
+    },
+    {
+      "hijri": "1445-12-01",
+      "gregorian": "2024-06-07"
+    },
+    {
+      "hijri": "1448-01-01",
+      "gregorian": "2026-06-16"
+    },
+    {
+      "hijri": "1448-06-01",
+      "gregorian": "2026-11-11"
+    },
+    {
+      "hijri": "1448-12-01",
+      "gregorian": "2027-05-07"
+    },
+    {
+      "hijri": "1450-01-01",
+      "gregorian": "2028-05-25"
+    },
+    {
+      "hijri": "1450-06-01",
+      "gregorian": "2028-10-19"
+    },
+    {
+      "hijri": "1450-12-01",
+      "gregorian": "2029-04-15"
+    },
+    {
+      "hijri": "1499-01-01",
+      "gregorian": "2075-12-09"
+    },
+    {
+      "hijri": "1499-06-01",
+      "gregorian": "2076-05-04"
+    },
+    {
+      "hijri": "1499-12-01",
+      "gregorian": "2076-10-29"
+    },
+    {
+      "hijri": "1500-01-01",
+      "gregorian": "2076-11-27"
+    },
+    {
+      "hijri": "1500-06-01",
+      "gregorian": "2077-04-24"
+    },
+    {
+      "hijri": "1500-12-01",
+      "gregorian": "2077-10-18"
+    }
+  ],
+  "source": "Independent .NET System.Globalization.UmAlQuraCalendar runtime cross-check; not independently adjudicated Saudi government references"
+}

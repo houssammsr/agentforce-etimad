@@ -17,7 +17,9 @@ class VertexProbeTests(unittest.TestCase):
             technical_maximum_points=70, initial_security_percent=1.0,
             local_sme_initial_security_exempt=True, certificate_remedy_max_working_days=10,
             award_rule='best_combined_score', award_rule_needs_clarification=False,
-            citations=[dict(field='technical_pass_points', pdf_page=2, quote='Synthetic evidence')], warnings=[])
+            citations=[], warnings=[])
+        self.output['citations'] = [dict(field=f, pdf_page=2, quote='Synthetic evidence')
+            for f, v in self.output.items() if v is not None and f not in {'citations', 'warnings', 'award_rule_needs_clarification'}]
 
     def test_complete_typed_output(self):
         self.assertTrue(validate_output(self.output, 'STOP'))

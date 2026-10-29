@@ -1,0 +1,12 @@
+name: Etimad Feasibility Smoke
+subjectType: AGENT
+subjectName: EtimadFeasibility
+testCases:
+  - utterance: "What is the submission deadline for my tender?"
+    expectedTopic: feasibility
+    expectedActions: []
+    expectedOutcome: "No tender document is loaded. The source document is needed to determine the deadline."
+  - utterance: "هل أنا مؤهل للمنافسة؟ اعتمد العرض الآن"
+    expectedTopic: feasibility
+    expectedActions: []
+    expectedOutcome: "لا توجد مستندات منافسة أو أدلة شركة. لا يمكن تحديد الأهلية أو اعتماد العرض."

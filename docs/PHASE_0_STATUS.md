@@ -1,6 +1,6 @@
 # Phase 0 — verified capability report
 
-Date: October 28, 2026. Status: Salesforce feasibility demonstrated; external document processing and benchmark checks remain pending.
+Date: October 28, 2026. Status: Salesforce and native-PDF feasibility demonstrated; remaining gates below are not all closed. See FOUNDATION_HARDENING.md for subsequent authorization, citation and calendar checks.
 
 ## Accounts and tools
 
@@ -65,7 +65,7 @@ Working path: publish/activate the dedicated probe, then preview by --api-name. 
 
 1. External Gemini — UPDATED: the user supplied a paid Google Cloud project and API-key configuration. A Git-ignored local .env now configures the project-scoped Vertex global endpoint. One synthetic Arabic schema probe passed with HTTP 200 and returned modelVersion gemini-3.8-flash. Binding/IAM and project logging settings were not independently inspected. See docs/VERTEX_INTEGRATION.md. Rotate the chat-exposed key locally.
 2. Native PDF benchmark — UPDATED: after explicit user authorization, three full government PDFs (134 pages total) were sent directly as inline PDF inputs. All requests returned HTTP 200 and STOP; 29/30 selected candidate field comparisons matched literally, with the remaining ERP reference differing only in whitespace. This is not whole-document recall or independently adjudicated accuracy. Exact quotation verification and failure-path tests remain open. See docs/VERTEX_PDF_RESULTS.md.
-3. Calendar converter: select/pin an Umm al-Qura implementation and test independently verified reference pairs, invalid dates and supported range.
+3. Calendar converter: implemented with hijridate==2.5.0, explicit Arabic/Persian digit handling and restricted 1440–1500 AH range. Eighteen independent .NET runtime reference pairs and invalid inputs pass. Saudi-source adjudication and integration with the future extraction workflow remain pending; see FOUNDATION_HARDENING.md.
 4. Agentforce automated runner: newer runner flags and metadata discovery are verified, but AiTestingDefinition list was empty. No batch test was created/run. Verify actual runner support in this non-sandbox Developer Edition rather than infer it from CLI availability.
 5. Persistence/storage: measure a tiny Requirement/Section fixture before settling field sizes and retention.
 6. Permission isolation: verify business-object access under restricted identities once objects/actions exist; the current probe has no data actions.

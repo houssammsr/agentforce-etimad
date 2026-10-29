@@ -46,6 +46,7 @@ class CorpusIntegrityTests(unittest.TestCase):
 class BaselineTests(unittest.TestCase):
     def trial(self, mode, seconds):
         return dict(trial_id=mode, pair_id='P1', participant_id='reviewer1', document_id='D1',
+                    annotation_version='synthetic-v1', reviewed_assertion_ids=__import__('json').dumps([str(i) for i in range(20)]),
                     mode=mode, order='1' if mode == 'manual' else '2', active_seconds=str(seconds),
                     reviewed_assertions='20', missed_critical='0', false_mandatory='0',
                     citation_errors='0', quality_reviewed_by='reviewer2', completed='true')

@@ -43,7 +43,7 @@ If a weighted evaluation table conflicts with award wording, preserve the wordin
 Do not invent company evidence, eligibility, approval, document updates, or current tender status.'''
 
 
-def validate_output(output, finish_reason):
+def validate_output(output, finish_reason, page_count=None):
     if finish_reason != 'STOP' or type(output) is not dict or set(output) != set(FIELDS):
         return False
     for name, spec in FIELDS.items():
@@ -65,12 +65,32 @@ def validate_output(output, finish_reason):
         return False
     if not output['citations']:
         return False
-    return all(type(c) is dict and set(c) == {'field', 'pdf_page', 'quote'}
+    valid = all(type(c) is dict and set(c) == {'field', 'pdf_page', 'quote'}
                and type(c['field']) is str and c['field'] in FIELDS and type(c['pdf_page']) is int and c['pdf_page'] > 0
+               and (page_count is None or c['pdf_page'] <= page_count)
                and type(c['quote']) is str and bool(c['quote'].strip()) for c in output['citations'])
+    required = {f for f in FIELDS if f not in {'citations', 'warnings', 'award_rule_needs_clarification'}
+                and output[f] is not None}
+    if output['award_rule_needs_clarification']:
+        required.add('award_rule_needs_clarification')
+    return valid and required <= {c['field'] for c in output['citations']}
+
+
+def authorize(source, config, authorization):
+    """Fail closed for documents and destinations outside the recorded grant."""
+    if (authorization.get('authority') != 'explicit_user_message'
+            or source['source_id'] not in authorization.get('source_ids', [])
+            or authorization.get('provider') != 'Google Cloud Vertex AI'
+            or authorization.get('location') != config['GOOGLE_CLOUD_LOCATION']
+            or authorization.get('project_id') != config['GOOGLE_CLOUD_PROJECT']
+            or authorization.get('purpose_code') != 'native_pdf_feasibility'
+            or authorization.get('source_hashes', {}).get(source['source_id']) != source['sha256']):
+        raise ValueError('Document or destination not covered by recorded upload authorization')
 
 
 def probe(source, config):
+    authorization = json.loads((ROOT / 'data/sources/cloud_authorizations.json').read_text(encoding='utf-8'))
+    authorize(source, config, authorization)
     pdf = (ROOT / source['local_path']).read_bytes()
     if hashlib.sha256(pdf).hexdigest() != source['sha256']:
         raise ValueError('Document hash mismatch; stop before uploading')
@@ -101,7 +121,7 @@ def probe(source, config):
     candidate = candidates[0] if candidates else {}
     text = ''.join(part.get('text', '') for part in candidate.get('content', {}).get('parts', []) if not part.get('thought'))
     output = json.loads(text)
-    if not validate_output(output, candidate.get('finishReason')):
+    if not validate_output(output, candidate.get('finishReason'), source['page_count']):
         raise ValueError('Incomplete or schema-mismatched output; no result accepted')
     return {'source_id': source['source_id'], 'source_sha256': source['sha256'],
             'model_requested': config['VERTEX_MODEL'], 'model_returned': result.get('modelVersion'),
@@ -119,8 +139,8 @@ def checks(run, labels, source):
         'technical_pass_points': expected['TECHNICAL_PASS']['minimum'],
         'technical_maximum_points': expected['TECHNICAL_PASS']['technical_maximum'],
         'initial_security_percent': expected['BID_SECURITY_RATE']['rate'],
-        'local_sme_initial_security_exempt': True,
-        'certificate_remedy_max_working_days': 10,
+        'local_sme_initial_security_exempt': expected['LOCAL_SME_SECURITY_EXEMPTION']['local_SME_exempt_from_initial_security'],
+        'certificate_remedy_max_working_days': expected['CERTIFICATE_REMEDY']['maximum_working_days'],
         'award_rule': expected['AWARD_RULE']['rule'],
         'award_rule_needs_clarification': expected['AWARD_RULE']['needs_clarification'],
     }
@@ -131,6 +151,8 @@ def checks(run, labels, source):
         c.get('field') in FIELDS and type(c.get('pdf_page')) is int and 1 <= c['pdf_page'] <= source['page_count']
         and isinstance(c.get('quote'), str) and bool(c['quote'].strip()) for c in citations)
     return {'candidate_comparisons': comparisons, 'citation_shape_valid': citation_shape,
+            'accepted_for_business_use': False,
+            'acceptance_blocker': 'Field-level quotation and semantic support require review; schema success is insufficient',
             'semantic_citation_verification': 'pending_visual_review',
             'independent_gold': False, 'whole_document_recall': None}
 
@@ -146,6 +168,9 @@ if __name__ == '__main__':
     labels = json.loads((ROOT / 'data/annotations/requirements.json').read_text(encoding='utf-8'))
     outdir = ROOT / 'local-artifacts/vertex-pdf'
     outdir.mkdir(parents=True, exist_ok=True)
+    authorization = json.loads((ROOT / 'data/sources/cloud_authorizations.json').read_text(encoding='utf-8'))
+    for source in manifest['sources']:
+        authorize(source, config, authorization)
     for source in manifest['sources']:
         try:
             run = probe(source, config)

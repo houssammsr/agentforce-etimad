@@ -3,6 +3,7 @@ import argparse
 import csv
 import json
 import statistics
+import hashlib
 from collections import defaultdict
 from pathlib import Path
 
@@ -25,17 +26,25 @@ def summarize(rows):
         seconds = float(row['active_seconds'])
         if not 0 < seconds < float('inf'):
             raise ValueError('Active time must be finite and positive')
-        parsed = dict(row, active_seconds=seconds)
+        ids = json.loads(row.get('reviewed_assertion_ids', '[]'))
+        if (not isinstance(ids, list) or not ids or any(type(i) is not str or not i for i in ids)
+                or len(set(ids)) != len(ids) or not row.get('annotation_version')):
+            raise ValueError('Exact assertion IDs and annotation version are required')
+        scope = hashlib.sha256(json.dumps([row['annotation_version'], sorted(ids)],
+                                         ensure_ascii=False).encode('utf-8')).hexdigest()
+        parsed = dict(row, active_seconds=seconds, scope_hash=scope)
         for field in ('reviewed_assertions', 'missed_critical', 'false_mandatory', 'citation_errors'):
             parsed[field] = int(row[field])
             if parsed[field] < 0:
                 raise ValueError('Quality counts cannot be negative')
         if not parsed['reviewed_assertions']:
             raise ValueError('Review scope cannot be empty')
+        if parsed['reviewed_assertions'] != len(ids):
+            raise ValueError('Assertion count must match the explicit scope')
         pairs[key][row['mode']] = parsed
     completed = [p for p in pairs.values() if set(p) == {'manual', 'assisted'}]
     for pair in completed:
-        if pair['manual']['reviewed_assertions'] != pair['assisted']['reviewed_assertions']:
+        if pair['manual']['scope_hash'] != pair['assisted']['scope_hash']:
             raise ValueError('Paired trials must use the same review scope')
     savings = [(p['manual']['active_seconds'] - p['assisted']['active_seconds']) /
                p['manual']['active_seconds'] * 100 for p in completed]
