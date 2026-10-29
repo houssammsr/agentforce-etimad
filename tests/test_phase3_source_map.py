@@ -61,7 +61,7 @@ class MappingTests(unittest.TestCase):
     def test_reviewed_compound_mapping_builds_scoped_rules(self):
         security, certificate = rules_from_mapping(self.reviewed_bundle())
         self.assertEqual(('LOCAL_ESTABLISHMENT', 'SME_CLASSIFICATION', 'SME_CERTIFICATE'), security.except_if)
-        self.assertEqual(('CLAIMS_SECURITY_EXEMPTION',), certificate.applies_if)
+        self.assertEqual(('OMITS_INITIAL_SECURITY',), certificate.applies_if)
 
     def test_edited_source_or_unreviewed_condition_rejected(self):
         for key, value in [('reviewed_conditions', {}), ('relationships_reviewed', False)]:

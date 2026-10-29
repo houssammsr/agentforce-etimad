@@ -43,7 +43,7 @@ def rules_from_mapping(bundle):
     # These scoped relationships must be affirmed by the local review overlay;
     # an issuer term or a certificate alone does not prove supplier eligibility.
     expected = {'exception_all_of': ['LOCAL_ESTABLISHMENT', 'SME_CLASSIFICATION', 'SME_CERTIFICATE'],
-                'certificate_applies_if': ['CLAIMS_SECURITY_EXEMPTION']}
+                'certificate_applies_if': ['OMITS_INITIAL_SECURITY']}
     if bundle.get('reviewed_conditions') != expected:
         raise ValueError('Explicit compound-condition review required')
     version = bundle['source_sha256']
@@ -81,7 +81,7 @@ def build_mapping(source, run, extracted, pdf_bytes):
     return dict(schema_version=1, source_id=source['source_id'], source_sha256=source['sha256'],
                 page_count=source['page_count'], clauses=clauses, missing_roles=missing,
                 proposed_conditions={'exception_all_of': ['LOCAL_ESTABLISHMENT', 'SME_CLASSIFICATION', 'SME_CERTIFICATE'],
-                                     'certificate_applies_if': ['CLAIMS_SECURITY_EXEMPTION']},
+                                     'certificate_applies_if': ['OMITS_INITIAL_SECURITY']},
                 relationships_reviewed=False, accepted_for_business_use=False,
                 scope='candidate source mapping; not supplier eligibility',
                 notice='Exact quotation matching is not proof of semantic applicability.')

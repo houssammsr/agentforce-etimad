@@ -9,6 +9,9 @@ node_modules/
 coverage/
 test-results/
 local-artifacts/
+# Local org test-suite exports; keep future authored Etimad suites visible.
+/force-app/main/default/aiTestingDefinitions/Arabia_Smoke_Test.aiTestingDefinition-meta.xml
+/force-app/main/default/aiTestingDefinitions/Etimad_Feasibility_Smoke.aiTestingDefinition-meta.xml
 *.log
 /README.md
 /PROJECT_PLAN.md

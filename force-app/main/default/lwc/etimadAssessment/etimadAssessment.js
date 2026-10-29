@@ -17,6 +17,7 @@ export default class EtimadAssessment extends LightningElement {
     error;
     uncertain = false;
     get options() { return this.workspaces.map(w => ({label: `${w.Name} · ${w.Supplier__c}`, value:w.Id})); }
+    get sourceMode() { return this.workspaces.find(w=>w.Id===this.selected)?.Source_Model__c === 'SOFTWARE_SECURITY_V1'; }
     get disabled() { return this.busy || this.uncertain || !this.selected; }
     get dirty() { const w=this.workspaces.find(x=>x.Id===this.selected); return !!w && this.draft!==w.Evidence_JSON__c; }
     get actionDisabled() { return this.disabled || this.dirty; }

@@ -39,6 +39,16 @@
     <field>Etimad_Review__c.Exception_Concept__c</field>
     <readable>true</readable>
   </fieldPermissions>
+  <fieldPermissions>
+    <editable>true</editable>
+    <field>Etimad_Assessment__c.Source_Model__c</field>
+    <readable>true</readable>
+  </fieldPermissions>
+  <fieldPermissions>
+    <editable>true</editable>
+    <field>Etimad_Assessment__c.Source_Key__c</field>
+    <readable>true</readable>
+  </fieldPermissions>
   <label>Etimad Phase 3 Data</label>
   <objectPermissions>
     <allowCreate>true</allowCreate>

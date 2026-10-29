@@ -1,6 +1,6 @@
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
     <types><members>Etimad_Review__c</members><members>Etimad_Assessment__c</members><name>CustomObject</name></types>
-    <types><members>EtimadAssessmentService</members><members>EtimadAssessmentTest</members><members>EtimadReviewController</members><members>EtimadCandidateContract</members><members>EtimadReviewGuard</members><members>EtimadReviewControllerTest</members><name>ApexClass</name></types>
+    <types><members>EtimadCompoundRules</members><members>EtimadSourceWorkspaceTest</members><members>EtimadAssessmentService</members><members>EtimadAssessmentTest</members><members>EtimadReviewController</members><members>EtimadCandidateContract</members><members>EtimadReviewGuard</members><members>EtimadReviewControllerTest</members><name>ApexClass</name></types>
     <types><members>EtimadReviewTrigger</members><members>EtimadAssessmentTrigger</members><name>ApexTrigger</name></types>
     <types><members>Etimad_Read</members><members>Etimad_Import</members><members>Etimad_Verify</members><members>Etimad_Approve</members><name>CustomPermission</name></types>
     <types><members>Etimad_Phase3_Data</members><members>Etimad_Phase3_Read</members><members>Etimad_Reader</members><members>Etimad_Reviewer</members><members>Etimad_Importer</members><name>PermissionSet</name></types>

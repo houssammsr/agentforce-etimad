@@ -31,7 +31,7 @@ Eight new synthetic tests plus the existing suite pass: 46 Python tests. This do
 
 ## Remaining Phase 3 integration
 
-Implementation of source mapping and compound conditions has started locally. See `specs/phase3-source-integration.md` for the current audit, 64-test result and explicit source-citation gaps. The deployed Apex behavior is unchanged by that increment.
+Software-specific source mapping and compound conditions are now implemented and deployed. See `specs/phase3-source-integration.md` for the current 69-test result, deployment evidence and EA-00001 provisional import. Human source review is still pending; ERP and Audit are unchanged. The original generic mapping audit is retained there as history.
 
 - Model conditional certificate obligations and exception predicates explicitly; this first slice accepts only reviewed direct concept links.
 - Map saved authorized candidate extraction to reviewed requirements, retaining every source citation and exception relationship. Do not silently mark candidates reviewed.

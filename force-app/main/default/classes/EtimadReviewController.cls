@@ -167,6 +167,28 @@ public with sharing class EtimadReviewController {
         try { Database.update(updates,AccessLevel.USER_MODE); } finally { serviceWrite=false; }
     }
 
+    /** Link only accessible, unlinked, matching provisional source clauses. */
+    public static void linkSource(Id workspaceId,List<Id> reviewIds) {
+        requirePermission('Etimad_Import');
+        List<Etimad_Assessment__c> workspaces=[SELECT Id,Source_Id__c,Document_Version__c,Source_Model__c
+            FROM Etimad_Assessment__c WHERE Id=:workspaceId WITH USER_MODE LIMIT 1 FOR UPDATE];
+        if(workspaces.isEmpty() || workspaces[0].Source_Model__c!='SOFTWARE_SECURITY_V1' || reviewIds==null || reviewIds.size()!=3)
+            throw new ReviewException('Source workspace and three provisional clauses required.');
+        Etimad_Assessment__c w=workspaces[0];
+        List<Etimad_Review__c> rows=[SELECT Id,Synthetic__c,Source_Id__c,Source_Hash__c,Document_Version__c,
+            Assessment__c,Verified_Revision__c FROM Etimad_Review__c WHERE Id IN :reviewIds WITH USER_MODE FOR UPDATE];
+        if(rows.size()!=3) throw new ReviewException('All source clauses must be accessible.');
+        List<Etimad_Review__c> updates=new List<Etimad_Review__c>();
+        for(Etimad_Review__c row:rows) {
+            if(row.Synthetic__c || row.Assessment__c!=null || row.Verified_Revision__c!=null || row.Source_Id__c!=w.Source_Id__c ||
+                row.Source_Hash__c!=w.Document_Version__c || row.Document_Version__c!=w.Document_Version__c)
+                throw new ReviewException('Unlinked provisional clauses must match workspace source.');
+            updates.add(new Etimad_Review__c(Id=row.Id,Assessment__c=w.Id));
+        }
+        serviceWrite=true;
+        try { Database.update(updates,AccessLevel.USER_MODE); } finally { serviceWrite=false; }
+    }
+
     private static void writeReview(Etimad_Review__c change) {
         serviceWrite = true;
         try {

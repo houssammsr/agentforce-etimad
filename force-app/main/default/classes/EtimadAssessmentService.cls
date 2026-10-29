@@ -23,14 +23,15 @@ public with sharing class EtimadAssessmentService {
         if (!FeatureManagement.checkPermission(name)) throw new AssessmentException('Etimad permission required.');
     }
     public static String fingerprint(Etimad_Assessment__c row) {
-        return EncodingUtil.convertToHex(Crypto.generateDigest('SHA-256', Blob.valueOf(JSON.serialize(
-            new List<Object>{row.Supplier__c,row.As_Of__c,row.Evidence_JSON__c,row.Source_Id__c,row.Document_Version__c}))));
+        List<Object> parts=new List<Object>{row.Supplier__c,row.As_Of__c,row.Evidence_JSON__c,row.Source_Id__c,row.Document_Version__c};
+        if(row.Source_Model__c!=null) { parts.add(row.Source_Model__c); parts.add(row.Source_Key__c); }
+        return EncodingUtil.convertToHex(Crypto.generateDigest('SHA-256',Blob.valueOf(JSON.serialize(parts))));
     }
     @AuraEnabled
     public static List<Etimad_Assessment__c> listWorkspaces() {
         permission('Etimad_Read');
         return [SELECT Id,Name,Supplier__c,As_Of__c,Source_Id__c,Document_Version__c,
-            Evidence_JSON__c,Revision__c FROM Etimad_Assessment__c WITH USER_MODE ORDER BY CreatedDate DESC LIMIT 10];
+            Evidence_JSON__c,Revision__c,Source_Model__c,Source_Key__c FROM Etimad_Assessment__c WITH USER_MODE ORDER BY CreatedDate DESC LIMIT 10];
     }
     /** Evidence editing is not verification: edits always clear verification flags. */
     @AuraEnabled
@@ -54,7 +55,7 @@ public with sharing class EtimadAssessmentService {
     }
     private static Etimad_Assessment__c locked(Id id,String revision) {
         List<Etimad_Assessment__c> rows=[SELECT Id,Supplier__c,As_Of__c,Source_Id__c,
-            Document_Version__c,Evidence_JSON__c,Revision__c FROM Etimad_Assessment__c
+            Document_Version__c,Evidence_JSON__c,Revision__c,Source_Model__c,Source_Key__c FROM Etimad_Assessment__c
             WHERE Id=:id WITH USER_MODE LIMIT 1 FOR UPDATE];
         if(rows.isEmpty() || String.isBlank(revision) || rows[0].Revision__c!=revision)
             throw new AssessmentException('Workspace changed or unavailable. Refresh.');
@@ -84,6 +85,7 @@ public with sharing class EtimadAssessmentService {
         permission('Etimad_Read');
         Etimad_Assessment__c workspace=locked(workspaceId,expectedRevision);
         List<Evidence> all=parse(workspace.Evidence_JSON__c,workspace.Supplier__c);
+        if(workspace.Source_Model__c!=null) return assessSource(workspace,all);
         List<Finding> results=new List<Finding>();
         for(Etimad_Review__c row:[SELECT Id,Concept__c,Revision__c,Verified_Revision__c,
             Exception_Concept__c,Document_Version__c FROM Etimad_Review__c
@@ -110,6 +112,73 @@ public with sharing class EtimadAssessmentService {
             results.add(f);
         }
         return results;
+    }
+    /** Three cited clauses must each be human-reviewed before compound assessment. */
+    private static List<Finding> assessSource(Etimad_Assessment__c w,List<Evidence> evidence) {
+        if(w.Source_Model__c!='SOFTWARE_SECURITY_V1') throw new AssessmentException('Unknown source model.');
+        List<Etimad_Review__c> clauses=[SELECT Id,Concept__c,Revision__c,Verified_Revision__c,Source_Id__c,
+            Source_Hash__c,Document_Version__c FROM Etimad_Review__c WHERE Assessment__c=:w.Id WITH USER_MODE LIMIT 4];
+        Set<String> concepts=new Set<String>(); Boolean reviewed=true; List<String> revisions=new List<String>();
+        for(Etimad_Review__c c:clauses) {
+            concepts.add(c.Concept__c); revisions.add(c.Revision__c+':'+String.valueOf(c.Verified_Revision__c));
+            if(c.Verified_Revision__c!=c.Revision__c || c.Source_Id__c!=w.Source_Id__c ||
+                c.Source_Hash__c!=w.Document_Version__c || c.Document_Version__c!=w.Document_Version__c) reviewed=false;
+        }
+        Boolean complete=clauses.size()==3 && concepts==new Set<String>{'BID_SECURITY','SME_EXCEPTION','SME_CERTIFICATE'};
+        revisions.sort(); String context=EncodingUtil.convertToHex(Crypto.generateDigest('SHA-256',Blob.valueOf(w.Revision__c+String.join(revisions,':'))));
+        List<Finding> findings=new List<Finding>();
+        for(Etimad_Review__c c:clauses) if(c.Concept__c!='SME_EXCEPTION') {
+            Finding f=new Finding(); f.reviewId=c.Id; f.concept=c.Concept__c; f.revision=context; f.evidenceIds=''; f.status='unknown';
+            f.reason=!complete ? 'SOURCE_CLAUSES_INCOMPLETE' : 'SOURCE_RELATIONSHIPS_NOT_REVIEWED';
+            if(complete && reviewed) {
+                EtimadCompoundRules.Result r=EtimadCompoundRules.evaluate(c.Concept__c,evidence,w.As_Of__c,w.Supplier__c);
+                f.status=r.status; f.reason=r.reason; f.evidenceIds=String.join(r.evidenceIds,', ');
+            }
+            findings.add(f);
+        }
+        return findings;
+    }
+    public class SourceInput {
+        public String supplier;
+        public Date asOf;
+        public List<EtimadCandidateContract.Candidate> candidates;
+    }
+    /** Provisional source clauses plus synthetic supplier; no source attestation. */
+    @AuraEnabled
+    public static Id importSoftwareWorkspace(String payload) {
+        permission('Etimad_Import');
+        if(String.isBlank(payload) || payload.length()>32000) throw new AssessmentException('Invalid workspace payload.');
+        SourceInput input=(SourceInput)JSON.deserializeStrict(payload,SourceInput.class);
+        if(input==null || input.supplier!='SYNTHETIC-SOFTWARE-SUPPLIER' || input.asOf==null || input.candidates==null || input.candidates.size()!=3)
+            throw new AssessmentException('Explicit synthetic supplier, date and three clauses required.');
+        Map<String,Etimad_Review__c> rows=EtimadCandidateContract.prepare(JSON.serialize(input.candidates));
+        Set<String> concepts=new Set<String>(); Set<String> hashes=new Set<String>(); List<String> revisions=new List<String>();
+        for(Etimad_Review__c row:rows.values()) {
+            if(row.Source_Id__c!='TAQEEM-SOFTWARE-2026' || row.Synthetic__c || row.Document_Version__c!=row.Source_Hash__c)
+                throw new AssessmentException('Software source identity/version required.');
+            concepts.add(row.Concept__c); hashes.add(row.Source_Hash__c); revisions.add(row.Revision__c);
+        }
+        if(rows.size()!=3 || hashes.size()!=1 || concepts!=new Set<String>{'BID_SECURITY','SME_EXCEPTION','SME_CERTIFICATE'})
+            throw new AssessmentException('Complete distinct source clauses required.');
+        revisions.sort(); String hash; for(String value:hashes) hash=value;
+        String key=EncodingUtil.convertToHex(Crypto.generateDigest('SHA-256',Blob.valueOf(input.supplier+String.valueOf(input.asOf)+String.join(revisions,':'))));
+        List<Etimad_Assessment__c> existing=[SELECT Id FROM Etimad_Assessment__c WHERE Source_Key__c=:key WITH USER_MODE LIMIT 1];
+        if(!existing.isEmpty()) return existing[0].Id;
+        Savepoint checkpoint=Database.setSavepoint();
+        try {
+            Etimad_Assessment__c w=new Etimad_Assessment__c(Supplier__c=input.supplier,As_Of__c=input.asOf,
+                Source_Id__c='TAQEEM-SOFTWARE-2026',Document_Version__c=hash,Evidence_JSON__c='[]',
+                Source_Model__c='SOFTWARE_SECURITY_V1',Source_Key__c=key);
+            serviceWrite=true;
+            try { Database.insert(w,AccessLevel.USER_MODE); } finally { serviceWrite=false; }
+            for(EtimadCandidateContract.Candidate c:input.candidates)
+                c.importKey=EncodingUtil.convertToHex(Crypto.generateDigest('SHA-256',Blob.valueOf(w.Id+':'+c.concept)));
+            List<Id> ids=EtimadReviewController.importCandidates(JSON.serialize(input.candidates));
+            EtimadReviewController.linkSource(w.Id,ids);
+            return w.Id;
+        } catch(Exception e) {
+            Database.rollback(checkpoint); throw new AssessmentException('Source workspace import failed; no partial changes committed.');
+        }
     }
     private static Boolean positive(List<Evidence> rows) { for(Evidence e:rows) if(e.assertion) return true; return false; }
     private static Boolean conflict(List<Evidence> rows) {

@@ -31,8 +31,45 @@ The supporting certificate clause needs exact local-source citation and independ
 
 ## Next implementation boundary
 
+The original boundary below is historical. The Software-specific implementation and deployment are now recorded in the next section; ERP and Audit remain unchanged.
+
 1. Capture exact certificate evidence from the existing authorized local source and review all clause relationships; no new provider request is needed for Software.
 2. Implement matching compound-rule contracts and source-bound import in Apex. Current deployed Apex still uses the simpler single-concept synthetic exception model; it has not been silently upgraded.
 3. Add the final evidence table, immutable assessment snapshots and assessment-based approval binding before declaring broader Phase 3 complete.
 
 The reviewed conditional Python engine is a new local module; existing Phase 2/3 deployed behavior and historical Tasks remain unchanged. No org operation was attempted.
+
+## Software source workspace — implemented and deployed October 29
+
+This increment uses the saved Software extraction and native-text ledger only. No new model request or original-PDF Salesforce upload occurred. It remains a source-bound demo with a synthetic supplier, not actual supplier eligibility or an open tender claim.
+
+### Source mapping
+
+- Base bid-security clause: PDF page 15.
+- SME exception: PDF page 16.
+- Supporting certificate: PDF page 14, section 35(d). The exact clause is extracted locally between section boundaries and retained only in ignored artifacts or the authorized selected-quotation records.
+- The certificate condition is **omission of initial security**, represented by OMITS_INITIAL_SECURITY, rather than the less precise earlier CLAIMS_SECURITY_EXEMPTION proposal. It must still be reviewed in context by the user.
+- All three source clauses start unverified. No previous real-source record or historical Task was repurposed or modified.
+
+### Implementation
+
+- `prepare_software_workspace.py --as-of YYYY-MM-DD` revalidates source and saved extraction, checks the existing selected-quotation Salesforce grant and prepares three provisional candidates locally. It fails closed if section anchors or role counts are ambiguous. Generic candidate mapping remains provisional; this step does not mark relationships reviewed.
+- `import_software_workspace.py --execute` re-prepares/compares the payload and calls only dev-agentforce. No retries, source attestation, approval or Task creation. Generated source-containing JSON, Apex and CLI output remain ignored.
+- Apex `importSoftwareWorkspace` validates source identity/version, exact clause roles, explicit historical date and the synthetic supplier identity. It atomically imports and links clauses with a content-based unique workspace key; identical retries reuse a workspace.
+- `EtimadCompoundRules` implements the compound-condition behavior in Apex. In source mode, source assessment requires all three accessible clauses to match the workspace and have current human verification. Two findings are produced (security and conditional certificate); the exception clause is supporting context, not a fictitious standalone obligation.
+- The SME exception requires local establishment + SME classification + current verified certificate. Missing conditions remain unknown; conflicts block exemption. Expired or wrong-supplier evidence does not qualify. Final security does not inherit this exception.
+- Source workspace context fingerprints include all three source revisions and verification states. Any source correction blocks the dependent findings until reviewed again. Existing unlinked Phase 2 fingerprints and synthetic demo mode remain compatible.
+- Added Source_Model__c and unique Source_Key__c fields plus Phase3 Data/Read grants. The UI explains the source-mode conditions. Its JSON evidence editor remains an interim developer interface.
+
+### Verified delivery evidence
+
+- First dry run found an Apex test runAs argument typing error; corrected to a typed User variable. No access bypass was used.
+- Subsequent dry run `0Affj00000WhErhCAF`: Succeeded, checkOnly=true, all 13 Apex tests passed, no coverage warnings.
+- Actual deployment `0Affj00000WgSNGCA3`: Succeeded, checkOnly=false, all 13 Apex tests passed.
+- Local verification: 69 Python tests and 13 Jest tests passed; diff whitespace checks passed. Tests use invented quotations only.
+- Import succeeded for EA-00001, SYNTHETIC-SOFTWARE-SUPPLIER, explicit historical assessment date 2026-03-12. No supplier evidence was fabricated as verified; initial evidence list is empty.
+- Independent read-only query confirmed exactly three linked clauses with pages 15/16/14, zero verified clauses and zero linked Tasks in that workspace. This check did not inspect private source quotation text or authorize any review.
+
+### Still required
+
+The user must review the real Software clauses and their stated relationship in the original PDF, then explicitly verify them. Synthetic supplier assertions can then demonstrate the compound paths; they must not be described as real company evidence. No live real-source assessment result is claimed before that review. Final evidence table, immutable assessment snapshots and assessment-bound approval remain outstanding. No commit or push was made during this increment.

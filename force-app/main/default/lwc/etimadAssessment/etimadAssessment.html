@@ -7,6 +7,10 @@
             <template lwc:if={error}><p role="alert">{error}</p></template>
             <lightning-combobox label="Workspace / مساحة التقييم" options={options} value={selected} onchange={choose} disabled={selectionDisabled}></lightning-combobox>
             <p><bdi>{context}</bdi></p>
+            <template lwc:if={sourceMode}>
+                <p dir="auto">Software source clauses with a synthetic supplier. Review all three source clauses and their relationship before verifying. Bid-security exception: LOCAL_ESTABLISHMENT + SME_CLASSIFICATION + valid SME_CERTIFICATE. The certificate obligation applies when OMITS_INITIAL_SECURITY is true. These findings are not bid approval.</p>
+                <p dir="rtl">بنود من كراسة البرمجيات مع مورد اصطناعي. راجع البنود الثلاثة وعلاقتها قبل التحقق. يتطلب الاستثناء إثبات المحلية وتصنيف المنشأة والشهادة السارية؛ ويطبق متطلب الشهادة عند عدم تقديم الضمان الابتدائي.</p>
+            </template>
             <p>Verify each linked requirement in the evidence review below before assessment. راجع المتطلبات المرتبطة أولاً.</p>
             <lightning-textarea label="Synthetic evidence JSON / أدلة اصطناعية — editing clears verification" value={draft} onchange={edit} disabled={editDisabled}></lightning-textarea>
             <lightning-button label="حفظ وإلغاء التحقق / Save and reset verification" data-action="save" onclick={act} disabled={editDisabled}></lightning-button>
