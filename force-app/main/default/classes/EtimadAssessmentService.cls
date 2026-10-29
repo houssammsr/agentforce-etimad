@@ -135,7 +135,8 @@ public with sharing class EtimadAssessmentService {
             'concept'=>concept,'fact'=>'SYNTHETIC demonstration: '+concept,'quote'=>'Synthetic source fixture; not an actual tender.',
             'synthetic'=>true});
         List<Id> ids=EtimadReviewController.importCandidates(JSON.serialize(candidates));
-        List<Etimad_Review__c> reviews=[SELECT Id,Concept__c FROM Etimad_Review__c WHERE Id IN :ids WITH USER_MODE];
+        // linkSynthetic reads this nullable field for every row, including non-exempt requirements.
+        List<Etimad_Review__c> reviews=[SELECT Id,Concept__c,Exception_Concept__c FROM Etimad_Review__c WHERE Id IN :ids WITH USER_MODE];
         for(Etimad_Review__c r:reviews) { r.Assessment__c=workspace.Id; if(r.Concept__c=='BID_SECURITY') r.Exception_Concept__c='LOCAL_SME_CERT'; }
         EtimadReviewController.linkSynthetic(reviews);
         return workspace.Id;

@@ -3,7 +3,7 @@
     <types><members>EtimadAssessmentService</members><members>EtimadAssessmentTest</members><members>EtimadReviewController</members><members>EtimadCandidateContract</members><members>EtimadReviewGuard</members><members>EtimadReviewControllerTest</members><name>ApexClass</name></types>
     <types><members>EtimadReviewTrigger</members><members>EtimadAssessmentTrigger</members><name>ApexTrigger</name></types>
     <types><members>Etimad_Read</members><members>Etimad_Import</members><members>Etimad_Verify</members><members>Etimad_Approve</members><name>CustomPermission</name></types>
-    <types><members>Etimad_Reader</members><members>Etimad_Reviewer</members><members>Etimad_Importer</members><name>PermissionSet</name></types>
+    <types><members>Etimad_Phase3_Data</members><members>Etimad_Phase3_Read</members><members>Etimad_Reader</members><members>Etimad_Reviewer</members><members>Etimad_Importer</members><name>PermissionSet</name></types>
     <types><members>etimadReview</members><members>etimadAssessment</members><name>LightningComponentBundle</name></types>
     <types><members>Etimad_Reviews</members><name>CustomTab</name></types>
     <version>68.0</version>
