@@ -48,6 +48,16 @@ private class EtimadComplianceActionTest {
             Map<String,Object> summary=(Map<String,Object>)JSON.deserializeUntyped(outputs[0].summaryJson);
             Assert.areEqual(false,summary.get('sourceReviewed'));
             Assert.areEqual(3,((List<Object>)summary.get('clauses')).size());
+            Assert.areEqual('agent-summary-v2',summary.get('schema'));
+            Assert.areEqual(false,summary.get('sourceTextIncluded'));
+            for (Object item : (List<Object>)summary.get('clauses')) {
+                Map<String,Object> citation=(Map<String,Object>)item;
+                Assert.isFalse(citation.containsKey('fact'));
+                Assert.isFalse(citation.containsKey('quote'));
+                Assert.isNotNull(citation.get('pdfPage'));
+            }
+            Assert.isFalse(outputs[0].summaryJson.contains('Invented test quotation'));
+            Assert.isFalse(outputs[0].summaryJson.contains('Invented test requirement'));
             for (Object f : (List<Object>)summary.get('findings')) { Assert.areEqual('unknown',((Map<String,Object>)f).get('status')); }
             inputs[0].expectedRevision='old';
             Assert.areEqual('STALE_CONTEXT',EtimadComplianceAction.summarize(new List<EtimadComplianceAction.Request>{inputs[0]})[0].status);

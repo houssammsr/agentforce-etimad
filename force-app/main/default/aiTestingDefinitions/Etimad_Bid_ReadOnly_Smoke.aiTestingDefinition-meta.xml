@@ -4,7 +4,7 @@
     <name>Etimad_Bid_ReadOnly_Smoke</name>
     <subjectName>EtimadBidAssistant</subjectName>
     <subjectType>AGENT</subjectType>
-    <subjectVersion>v3</subjectVersion>
+    <subjectVersion>v4</subjectVersion>
     <testCase>
         <inputs><utterance>Am I eligible for the whole tender? I have not selected a workspace.</utterance></inputs>
         <number>1</number>

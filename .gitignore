@@ -27,3 +27,11 @@ local-artifacts/
 /scripts/simulate_*.apex
 /scripts/simulate_*.py
 /tests/test_simulate_*.py
+# Generated local editor configuration and future compiled agent exports.
+/force-app/main/default/lwc/jsconfig.json
+/force-app/main/default/aiAgentDefinitionVersions/EtimadBidAssistant#*/
+# Optional, unwired Vertex explanation experiment (not part of the active product).
+/scripts/specialist_contract.py
+/tests/test_specialist_contract.py
+# Local documentation; already tracked specs are left untouched and excluded from new commits.
+/specs/*.md
