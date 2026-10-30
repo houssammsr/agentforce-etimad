@@ -1,0 +1,21 @@
+{
+  "required" : [ "workspaceId" ],
+  "unevaluatedProperties" : false,
+  "properties" : {
+    "expectedRevision" : {
+      "title" : "Expected Revision",
+      "description" : "Optional workspace revision explicitly supplied for stale-context detection.",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "workspaceId" : {
+      "title" : "Workspace Id",
+      "description" : "Explicit Salesforce Etimad assessment record ID supplied by the user; do not guess IDs or substitute another workspace.",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    }
+  },
+  "lightning:type" : "lightning__objectType"
+}
